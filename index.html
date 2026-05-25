@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wren AI Agent</title>
+  <!-- Tailwind CSS Play CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+  <!-- Google Fonts: Lora (Elegant Serif) & Plus Jakarta Sans (Clean Sans-Serif) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Marked.js Markdown Parser -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['Lora', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              bg: '#f8fafc',
+              card: '#ffffff',
+              border: '#e2e8f0',
+              accent: '#2563eb',
+              textPrimary: '#0f172a',
+              textSecondary: '#475569',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background: radial-gradient(circle at top, #f1f5f9 0%, #f8fafc 60%);
+      color: #0f172a;
+      background-size: cover;
+      position: relative;
+    }
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(to right, rgba(15, 23, 42, 0.02) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(15, 23, 42, 0.02) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    /* Simple custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f8fafc;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    /* Markdown custom tables overrides */
+    .prose table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.875rem;
+    }
+    .prose th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      font-weight: 600;
+      text-align: left;
+    }
+    .prose td {
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+    }
+    .prose tr:nth-child(even) {
+      background-color: rgba(241, 245, 249, 0.5);
+    }
+    /* Inline code style */
+    .prose code {
+      background-color: #f1f5f9;
+      color: #be123c;
+      padding: 0.125rem 0.25rem;
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+      font-family: monospace;
+    }
+    .prose code::before, .prose code::after {
+      content: "" !important;
+    }
+    /* Modern sleek ChatGPT appearance animation for rendering blocks */
+    @keyframes appear {
+      from {
+        opacity: 0.75;
+        transform: translateY(2px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .prose > *:last-child, .prose li:last-child {
+      animation: appear 0.12s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased flex flex-col h-screen overflow-hidden bg-brand-bg text-brand-textPrimary">
+
+  <!-- Header / Navigation Bar -->
+  <header class="border-b border-brand-border/60 px-6 py-2.5 flex items-center justify-between bg-brand-bg/70 backdrop-blur-md sticky top-0 z-50">
+    <div class="flex items-center gap-3">
+      <!-- Toggle Sessions Sidebar Button -->
+      <button onclick="toggleSessionsSidebar()" class="text-brand-textSecondary hover:text-brand-textPrimary hover:bg-brand-card/60 transition p-1.5 rounded-lg flex items-center justify-center border border-transparent hover:border-brand-border/40">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+      </button>
+      <!-- NK Proteins Logo -->
+      <div class="flex items-center gap-2">
+        <img src="https://www.nkproteins.com/wp-content/uploads/2023/12/NKProtein_logo.png" alt="NK Proteins Logo" class="h-6 w-auto object-contain">        
+        <span class="text-xs font-semibold text-brand-textSecondary border-l border-brand-border/60 pl-2 select-none tracking-wide">Workspace</span>
+      </div>
+    </div>
+
+    <!-- Right section: Project & Model dropdowns and connection health -->
+    <div class="flex items-center gap-3">
+      <!-- Model Select Pill -->
+      <div class="flex items-center gap-1.5 bg-brand-card/80 border border-brand-border/60 rounded-full px-2.5 py-1">
+        <span class="text-[10px] font-semibold text-brand-textSecondary uppercase tracking-wider pl-1">AI</span>
+        <select id="provider-select" class="bg-transparent border-0 text-xs rounded-full py-0.5 focus:outline-none focus:ring-0 text-brand-textPrimary font-medium cursor-pointer pr-6">
+          <option value="minimax" class="bg-white text-brand-textPrimary" selected>MiniMax (M2.7)</option>
+          <option value="gemini-2.5-flash" class="bg-white text-brand-textPrimary">Gemini 2.5 Flash</option>
+          <option value="gemini-3.5-flash" class="bg-white text-brand-textPrimary">Gemini 3.5 Flash</option>
+          <option value="gemini-3.1-flash-lite" class="bg-white text-brand-textPrimary">Gemini 3.1 Flash Lite</option>
+        </select>
+      </div>
+
+      <div id="thinking-select-container" class="flex items-center gap-1.5 bg-brand-card/80 border border-brand-border/60 rounded-full px-2.5 py-1 hidden">
+        <span class="text-[10px] font-semibold text-brand-textSecondary uppercase tracking-wider pl-1">Think</span>
+        <select id="thinking-select" class="bg-transparent border-0 text-xs rounded-full py-0.5 focus:outline-none focus:ring-0 text-brand-textPrimary font-medium cursor-pointer pr-6">
+          <option value="off" class="bg-white text-brand-textPrimary" selected>Off (Default)</option>
+          <option value="low" class="bg-white text-brand-textPrimary">Low (Reasoning)</option>
+          <option value="medium" class="bg-white text-brand-textPrimary">Medium</option>
+          <option value="high" class="bg-white text-brand-textPrimary">High</option>
+        </select>
+      </div>
+
+      <!-- Real-time streaming toggle Pill -->
+      <div class="flex items-center gap-2 bg-brand-card/80 border border-brand-border/60 rounded-full px-3 py-1">
+        <span class="text-[10px] font-semibold text-brand-textSecondary uppercase tracking-wider select-none">Stream</span>
+        <button id="stream-mode-toggle" class="relative inline-flex h-4.5 w-8 shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-brand-border" role="switch" aria-checked="false">
+          <span id="stream-mode-thumb" class="pointer-events-none inline-block h-3.5 w-3.5 transform rounded-full bg-brand-textPrimary shadow ring-0 transition duration-200 ease-in-out translate-x-0"></span>
+        </button>
+      </div>
+
+      <!-- Project Pill -->
+      <div class="flex items-center gap-1.5 bg-brand-card/80 border border-brand-border/60 rounded-full px-2.5 py-1">
+        <span class="text-[10px] font-semibold text-brand-textSecondary uppercase tracking-wider pl-1">Project</span>
+        <select id="project-select" class="bg-transparent border-0 text-xs rounded-full py-0.5 focus:outline-none focus:ring-0 text-brand-textPrimary font-medium cursor-pointer pr-6">
+          <option value="" disabled selected>Loading projects...</option>
+        </select>
+      </div>
+
+      <!-- Connected State -->
+      <div class="flex items-center gap-2 bg-blue-50 border border-blue-200/60 rounded-full px-3 py-1">
+        <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
+        <span class="text-[9px] font-semibold text-blue-600 tracking-wider uppercase select-none">LIVE</span>
+      </div>
+
+      <!-- Workspace Avatar -->
+      <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-brand-accent to-blue-400 p-0.5 flex items-center justify-center shadow-md select-none">
+        <div class="w-full h-full bg-white rounded-full flex items-center justify-center text-[10px] font-extrabold text-brand-accent tracking-wider">NK</div>
+      </div>
+    </div>
+  </header>
+
+
+
+  <div class="flex-grow flex relative overflow-hidden">
+    <!-- Left Sidebar (Sessions) -->
+    <aside id="sessions-sidebar" class="w-72 border-r border-brand-border bg-brand-card flex flex-col shrink-0 transition-all duration-300 ease-in-out relative z-30 h-full">
+      <!-- Sidebar Header -->
+      <div class="p-3.5 flex flex-col gap-2 shrink-0">
+        <button onclick="startNewSession()" class="w-full flex items-center gap-2 px-3 py-2 text-sm text-brand-textPrimary bg-brand-bg border border-brand-border hover:bg-brand-card/85 hover:border-brand-border/90 rounded-xl transition duration-150 font-medium text-left shadow-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 text-brand-accent">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          <span>New chat</span>
+        </button>
+        <div class="relative mt-1">
+          <svg class="absolute left-3 top-2.5 w-3.5 h-3.5 text-brand-textSecondary/60" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input type="text" id="sidebar-search" oninput="filterSessions()" placeholder="Search chats..." class="w-full pl-8 pr-3 py-1.5 bg-brand-bg border border-brand-border hover:border-brand-border/80 focus:border-brand-accent/80 rounded-xl text-xs text-brand-textPrimary placeholder-brand-textSecondary/50 focus:outline-none focus:ring-0 transition duration-150">
+        </div>
+      </div>
+      <!-- Sessions List -->
+      <div id="sessions-list" class="flex-grow overflow-y-auto px-3 pb-3 space-y-1">
+        <div class="text-center py-8 text-brand-textSecondary/50 italic text-[11px]">No active sessions</div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Wrapper -->
+    <div id="workspace-scroll-container" class="flex-grow flex flex-col overflow-y-auto h-full w-full">
+      <!-- Main Workspace -->
+      <main id="main-container" class="flex-grow flex flex-col justify-between max-w-4xl w-full mx-auto px-4 md:px-8 py-6 transition-all duration-300">
+    
+    <!-- Empty State Landing Zone (Shown initially) -->
+    <div id="landing-zone" class="flex-grow flex flex-col justify-center items-center py-16 space-y-8 transition-opacity duration-300 select-none">
+      <div class="text-center space-y-4">
+        <!-- NK Proteins elegant greeting -->
+        <h1 class="text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-blue-600 bg-clip-text text-transparent flex flex-col items-center justify-center gap-4 text-center">
+          <img src="https://www.nkproteins.com/wp-content/uploads/2023/12/NKProtein_logo.png" alt="NK Proteins Logo" class="h-20 w-auto object-contain mb-1 transform hover:scale-105 transition-all duration-300">
+          <span class="font-bold tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-blue-600 bg-clip-text text-transparent">Ask your business data anything.</span>
+        </h1>
+        <p class="text-sm text-brand-textSecondary max-w-md mx-auto leading-relaxed">
+          Ask questions naturally in plain English and I will translate it, inspect the metadata model, and query the underlying databases.
+        </p>
+      </div>
+
+      <!-- Large Input Area container -->
+      <div class="w-full max-w-2xl bg-brand-card border border-brand-border rounded-3xl p-5 focus-within:border-brand-accent transition-all duration-300 relative">
+        <textarea id="prompt-input" rows="3" placeholder="How can I help you today?" 
+                  class="w-full bg-transparent border-0 outline-none resize-none text-brand-textPrimary text-sm placeholder-brand-textSecondary/50 focus:ring-0 leading-relaxed"></textarea>
+        
+        <div class="flex justify-between items-center mt-3 pt-3 border-t border-brand-border/40">
+          <div class="text-[11px] text-brand-textSecondary flex gap-3 items-center">
+            <span class="bg-brand-accent/10 text-brand-accent border border-brand-accent/20 px-2 py-0.5 rounded-md text-[10px] font-semibold">WrenToolkit v1</span>
+            <span id="active-project-name" class="font-medium text-brand-textPrimary/80"></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="send-btn" class="bg-brand-accent text-white hover:bg-brand-accent/90 px-4 py-2 rounded-xl text-xs font-semibold tracking-wide transition duration-150 flex items-center gap-1.5 shadow active:scale-[0.98]">
+              <span>Ask Agent</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L6 12Zm0 0h7.5" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Chat Feed Container (Initially Hidden) -->
+    <div id="chat-zone" class="hidden flex-grow flex flex-col space-y-6 pb-28">
+      <!-- Sticky Header Wrapper for Active Context -->
+      <div class="sticky top-0 z-20 bg-brand-bg pt-2 pb-4 border-b border-brand-border/30">
+        <div class="bg-brand-card/90 border border-brand-border/65 rounded-xl p-3.5 flex justify-between items-center text-xs shadow-md">
+          <div>
+            <span class="text-brand-textSecondary">Active context:</span>
+            <span id="chat-project-title" class="font-semibold text-brand-textPrimary ml-1.5"></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <!-- Toggle Logs Button -->
+            <button onclick="toggleLogsSidebar()" class="text-brand-textSecondary hover:text-brand-textPrimary transition flex items-center gap-1.5 bg-brand-card border border-brand-border px-3 py-1.5 rounded-lg text-xs font-medium">
+              <span class="text-brand-accent">⚙</span> 
+              <span id="toggle-logs-text">Show Logs</span>
+              <span id="log-count-badge" class="bg-brand-accent/10 text-brand-accent border border-brand-accent/20 px-1.5 py-0.5 rounded-md text-[10px]" data-count="0">0</span>
+            </button>
+            <!-- New Chat Session Button -->
+            <button onclick="startNewSession()" class="text-brand-textSecondary hover:text-brand-accent transition flex items-center gap-1.5 bg-brand-card border border-brand-border px-3 py-1.5 rounded-lg text-xs font-medium">
+              ↺ New Chat
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Split Layout Grid: Chat feed & execution log sidebar -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        <!-- Left panel: dialogue stream (takes full width by default) -->
+        <div id="message-container" class="lg:col-span-3 space-y-6 transition-all duration-300">
+          <!-- Messages appended dynamically -->
+        </div>
+
+        <!-- Right panel: tool call sidebar (hidden by default) -->
+        <div id="logs-sidebar" class="hidden lg:col-span-1 bg-brand-card/50 border border-brand-border rounded-xl p-4 sticky top-24 self-start shadow-sm flex flex-col space-y-3 transition-all duration-300">
+          <div class="flex items-center justify-between border-b border-brand-border/60 pb-2 mb-1">
+            <h3 class="text-xs font-semibold uppercase tracking-wider text-brand-textPrimary flex items-center gap-1.5">
+              <span class="text-brand-accent">⚙</span> Tool Execution logs
+            </h3>
+            <button onclick="toggleLogsSidebar()" class="text-brand-textSecondary hover:text-brand-textPrimary text-xs">&times; Close</button>
+          </div>
+          <div id="sidebar-logs-container" class="space-y-3 max-h-[60vh] overflow-y-auto pr-1 text-xs">
+            <div id="empty-logs-placeholder" class="text-center py-8 text-brand-textSecondary/60 italic text-[11px]">
+              No database tools running yet.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Sticky Bottom Minimalist Chat Input (Shown during active chat) -->
+  <div id="chat-sticky-bottom" class="hidden fixed bottom-0 left-0 right-0 bg-gradient-to-t from-brand-bg via-brand-bg/90 to-transparent pt-10 pb-6 px-4 z-40">
+    <div class="max-w-3xl w-full mx-auto bg-brand-card border border-brand-border rounded-2xl p-3 focus-within:border-brand-accent transition-all duration-300 flex items-end gap-3 relative">
+      <textarea id="chat-prompt-input" rows="1" placeholder="Reply to Wren AI..." 
+                class="flex-grow bg-transparent border-0 outline-none resize-none text-brand-textPrimary text-sm placeholder-brand-textSecondary/50 focus:ring-0 leading-relaxed max-h-32 min-h-[24px] py-1"></textarea>
+      
+      <button id="chat-send-btn" class="bg-brand-accent text-white hover:bg-brand-accent/90 p-2.5 rounded-xl transition duration-150 flex items-center justify-center shrink-0 shadow active:scale-[0.98]">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L6 12Zm0 0h7.5" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Guess base api host
+    const API_HOST = window.location.origin === 'null' || window.location.protocol.startsWith('file') 
+      ? 'http://localhost:8000' 
+      : window.location.origin;
+
+    let projectMap = {};
+    let activeProjectId = '';
+    let currentThreadId = null;
+    let sessionsList = [];
+    let sessionsSidebarOpen = true;
+    // Elements
+    const projectSelect = document.getElementById('project-select');
+    const activeProjectName = document.getElementById('active-project-name');
+    const chatProjectTitle = document.getElementById('chat-project-title');
+    const promptInput = document.getElementById('prompt-input');
+    const sendBtn = document.getElementById('send-btn');
+    const landingZone = document.getElementById('landing-zone');
+    const chatZone = document.getElementById('chat-zone');
+    const chatStickyBottom = document.getElementById('chat-sticky-bottom');
+    const chatPromptInput = document.getElementById('chat-prompt-input');
+    const chatSendBtn = document.getElementById('chat-send-btn');
+    const messageContainer = document.getElementById('message-container');
+
+    // Toggle Left Sessions Sidebar
+    window.toggleSessionsSidebar = function() {
+      const sidebar = document.getElementById('sessions-sidebar');
+      if (!sidebar) return;
+      sessionsSidebarOpen = !sessionsSidebarOpen;
+      if (sessionsSidebarOpen) {
+        sidebar.classList.remove('w-0', 'overflow-hidden', 'border-r-0');
+        sidebar.classList.add('w-72');
+      } else {
+        sidebar.classList.remove('w-72');
+        sidebar.classList.add('w-0', 'overflow-hidden', 'border-r-0');
+      }
+    };
+
+    // Startup Initialization
+    async function loadProjects() {
+      try {
+        const res = await fetch(`${API_HOST}/projects`);
+        if (!res.ok) throw new Error('API server unreachable');
+        
+        const projects = await res.json();
+        projectSelect.innerHTML = '';
+        projectMap = {};
+
+        if (projects.length === 0) {
+          projectSelect.innerHTML = '<option value="" disabled>No projects loaded</option>';
+          return;
+        }
+
+        projects.forEach((proj, idx) => {
+          const opt = document.createElement('option');
+          opt.value = proj.project_id;
+          opt.textContent = `${proj.project_id} (${proj.description})`;
+          if (idx === 0) opt.selected = true;
+          projectSelect.appendChild(opt);
+
+          projectMap[proj.project_id] = proj;
+        });
+
+        updateActiveProject(projectSelect.value);
+        
+        // Load sessions list
+        await refreshSessionsList();
+      } catch (err) {
+        console.error('Failed to load projects:', err);
+        projectSelect.innerHTML = '<option value="" disabled>Connection failed</option>';
+        activeProjectName.textContent = 'Verify backend is active at port 8000';
+        activeProjectName.classList.add('text-red-400');
+      }
+    }
+
+    async function refreshSessionsList() {
+      try {
+        const res = await fetch(`${API_HOST}/chat/threads`);
+        if (!res.ok) throw new Error('Failed to fetch threads');
+        const data = await res.json();
+        sessionsList = data.threads || [];
+        renderSessionsList();
+      } catch (err) {
+        console.error('Error fetching threads:', err);
+      }
+    }
+
+    let sessionSearchQuery = '';
+
+    function filterSessions() {
+      const searchInput = document.getElementById('sidebar-search');
+      sessionSearchQuery = searchInput ? searchInput.value.toLowerCase().trim() : '';
+      renderSessionsList();
+    }
+
+    async function deleteSession(threadId) {
+      if (!confirm('Are you sure you want to delete this chat session?')) return;
+      try {
+        const res = await fetch(`${API_HOST}/chat/threads/${threadId}`, {
+          method: 'DELETE'
+        });
+        if (!res.ok) throw new Error('Failed to delete thread');
+        
+        if (currentThreadId === threadId) {
+          startNewSession();
+        } else {
+          await refreshSessionsList();
+        }
+      } catch (err) {
+        console.error('Error deleting thread:', err);
+        alert('Failed to delete session');
+      }
+    }
+
+    function renderSessionsList() {
+      const container = document.getElementById('sessions-list');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const filteredList = sessionsList.filter(threadId => {
+        if (!sessionSearchQuery) return true;
+        let displayName = threadId;
+        if (threadId.startsWith('session_')) {
+          displayName = `Conversation #${threadId.replace('session_', '')}`;
+        }
+        return displayName.toLowerCase().includes(sessionSearchQuery);
+      });
+
+      if (filteredList.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 text-brand-textSecondary/50 italic text-[11px]">
+            ${sessionSearchQuery ? 'No matching sessions' : 'No active sessions'}
+          </div>
+        `;
+        return;
+      }
+
+      // Grouping logic: mock grouping by indices for visually stunning hierarchy:
+      // index 0..1 => Today
+      // index 2..3 => Yesterday
+      // index 4+ => Older
+      const groups = {
+        'Today': [],
+        'Yesterday': [],
+        'Older': []
+      };
+
+      filteredList.forEach((threadId, idx) => {
+        if (idx < 2) {
+          groups['Today'].push(threadId);
+        } else if (idx < 4) {
+          groups['Yesterday'].push(threadId);
+        } else {
+          groups['Older'].push(threadId);
+        }
+      });
+
+      Object.entries(groups).forEach(([groupName, threads]) => {
+        if (threads.length === 0) return;
+
+        // Group Header
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'text-[10px] font-bold text-brand-accent uppercase tracking-wider px-2 pt-4 pb-1.5 select-none';
+        headerDiv.textContent = groupName;
+        container.appendChild(headerDiv);
+
+        threads.forEach(threadId => {
+          const item = document.createElement('div');
+          const isActive = currentThreadId === threadId;
+          item.className = `p-2.5 rounded-xl cursor-pointer transition-all duration-200 text-xs flex items-center justify-between group ${
+            isActive 
+              ? 'bg-brand-bg border border-brand-border/80 text-brand-textPrimary font-semibold shadow-md shadow-black/10 scale-[1.01]' 
+              : 'hover:bg-brand-bg/60 border border-transparent text-brand-textSecondary hover:text-brand-textPrimary hover:translate-x-0.5'
+          }`;
+          
+          let displayName = threadId;
+          if (threadId.startsWith('session_')) {
+            const presetNames = {
+              'session_1': 'Revenue insights',
+              'session_2': 'Protein sales trends',
+              'session_3': 'Customer churn analysis',
+              'session_4': 'Outstanding balance checks'
+            };
+            displayName = presetNames[threadId] || `Chat: ${threadId.replace('session_', '')}`;
+          }
+          
+          item.innerHTML = `
+            <div class="flex items-center gap-2 truncate flex-grow">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 text-brand-accent/70 shrink-0 group-hover:scale-110 transition duration-150">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.12 2.99 2.68 3.22 2.08.3 4.21.46 6.37.46s4.29-.16 6.37-.46c1.56-.23 2.68-1.62 2.68-3.22V8.25m-18 0V6a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 6v2.25m-18 0h18M12 18.75v-3" />
+              </svg>
+              <span class="truncate tracking-wide">${escapeHtml(displayName)}</span>
+            </div>
+            <button onclick="event.stopPropagation(); deleteSession('${threadId}')" class="opacity-0 group-hover:opacity-100 p-1 hover:bg-brand-border/60 rounded text-brand-textSecondary hover:text-rose-500 transition shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3 h-3">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.34 6.8c-.02.43-.36.78-.79.78H10.4c-.43 0-.77-.35-.78-.78L9.26 9m9.96-5.04L18.5 4.5H5.5L4.78 3.96m13.26 0A2.24 2.24 0 0 0 16 3H8a2.24 2.24 0 0 0-1.78.96m11.56 0v.48M7.22 4.44v.48" />
+              </svg>
+            </button>
+          `;
+          
+          item.addEventListener('click', () => {
+            selectSession(threadId);
+          });
+          
+          container.appendChild(item);
+        });
+      });
+    }
+
+    async function selectSession(threadId) {
+      currentThreadId = threadId;
+      renderSessionsList();
+
+      const mainContainer = document.getElementById('main-container');
+      if (mainContainer) {
+        mainContainer.classList.remove('max-w-4xl');
+        mainContainer.classList.add('max-w-7xl', 'lg:px-12');
+      }
+
+      landingZone.classList.add('hidden');
+      chatZone.classList.remove('hidden');
+      chatStickyBottom.classList.remove('hidden');
+
+      messageContainer.innerHTML = `
+        <div class="flex flex-col items-center justify-center py-20 space-y-3">
+          <span class="text-brand-accent text-2xl font-bold animate-spin-slow">✳</span>
+          <span class="text-xs text-brand-textSecondary">Loading conversation history...</span>
+        </div>
+      `;
+
+      try {
+        const provider = document.getElementById('provider-select')?.value || 'minimax';
+        const thinkingLevel = document.getElementById('thinking-select')?.value || 'off';
+        const res = await fetch(`${API_HOST}/chat/history/${activeProjectId}/${threadId}?provider=${provider}&thinking_level=${thinkingLevel}`);
+        if (!res.ok) throw new Error('Failed to load thread history');
+        const data = await res.json();
+        
+        messageContainer.innerHTML = '';
+        const messages = data.messages || [];
+        if (messages.length === 0) {
+          messageContainer.innerHTML = `
+            <div class="text-center py-8 text-brand-textSecondary/50 italic text-xs">
+              No messages in this session yet. Type a reply below to start!
+            </div>
+          `;
+        } else {
+          messages.forEach(msg => {
+            if (msg.role === 'user') {
+              const userDiv = document.createElement('div');
+              userDiv.className = 'flex justify-end';
+              userDiv.innerHTML = `
+                <div class="max-w-xl bg-slate-100 border border-slate-200/80 rounded-2xl px-4 py-2.5 text-sm text-brand-textPrimary shadow-sm">
+                  ${escapeHtml(msg.content)}
+                </div>
+              `;
+              messageContainer.appendChild(userDiv);
+            } else {
+              const agentDiv = document.createElement('div');
+              agentDiv.className = 'space-y-4 max-w-3xl py-2';
+              
+              if (msg.thinking) {
+                const thinkEl = document.createElement('div');
+                thinkEl.innerHTML = `
+                  <details open class="mb-3 bg-brand-card/45 border border-brand-border rounded-xl p-3.5 text-xs text-brand-textSecondary shadow-inner transition duration-200">
+                    <summary class="cursor-pointer font-medium select-none hover:text-brand-textPrimary flex items-center gap-2">
+                      <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-500/80"></span>
+                      <span>Thinking Process</span>
+                    </summary>
+                    <div class="mt-2.5 pl-3 border-l border-brand-border/60 space-y-1.5 text-[11px] leading-relaxed text-brand-textSecondary/90 font-mono whitespace-pre-wrap">${escapeHtml(msg.thinking)}</div>
+                  </details>
+                `;
+                agentDiv.appendChild(thinkEl);
+              }
+              
+              const textContainer = document.createElement('div');
+              textContainer.className = 'prose prose-sm max-w-none leading-relaxed text-brand-textPrimary';
+              textContainer.innerHTML = marked.parse(msg.content);
+              
+              agentDiv.appendChild(textContainer);
+              messageContainer.appendChild(agentDiv);
+            }
+          });
+        }
+        
+        scrollToBottom();
+      } catch (err) {
+        console.error('Error loading session history:', err);
+        messageContainer.innerHTML = `
+          <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-xs text-red-700 leading-relaxed">
+            <span class="font-bold flex items-center gap-1.5 mb-1 text-red-600">
+              <span class="text-sm">⚠</span> History Loading Error
+            </span>
+            Failed to fetch conversation history for thread. Please try refreshing.
+          </div>
+        `;
+      }
+    }
+
+    window.startNewSession = function() {
+      currentThreadId = null;
+      resetToLanding();
+      renderSessionsList();
+    };
+
+    function updateActiveProject(id) {
+      activeProjectId = id;
+      const proj = projectMap[id];
+      if (proj) {
+        activeProjectName.textContent = `Target: ${proj.path}`;
+        chatProjectTitle.textContent = `${proj.project_id} (${proj.description})`;
+      }
+    }
+
+    projectSelect.addEventListener('change', (e) => {
+      updateActiveProject(e.target.value);
+    });
+
+    function updateThinkingVisibility() {
+      const provider = document.getElementById('provider-select')?.value || 'minimax';
+      const thinkingSelectContainer = document.getElementById('thinking-select-container');
+      if (thinkingSelectContainer) {
+        if (provider.startsWith('gemini') && provider !== 'gemini-2.5-flash') {
+          thinkingSelectContainer.classList.remove('hidden');
+        } else {
+          thinkingSelectContainer.classList.add('hidden');
+        }
+      }
+    }
+
+    document.getElementById('provider-select').addEventListener('change', () => {
+      updateThinkingVisibility();
+      if (currentThreadId) {
+        selectSession(currentThreadId);
+      }
+    });
+
+    document.getElementById('thinking-select')?.addEventListener('change', () => {
+      if (currentThreadId) {
+        selectSession(currentThreadId);
+      }
+    });
+
+    // Streaming Mode Toggle Logic
+    const streamModeToggle = document.getElementById('stream-mode-toggle');
+    const streamModeThumb = document.getElementById('stream-mode-thumb');
+    
+    let streamModeEnabled = localStorage.getItem('wren_stream_mode') === 'messages';
+    
+    function updateToggleUI() {
+      if (streamModeEnabled) {
+        streamModeToggle.setAttribute('aria-checked', 'true');
+        streamModeToggle.classList.remove('bg-brand-border');
+        streamModeToggle.classList.add('bg-brand-accent');
+        streamModeThumb.classList.remove('translate-x-0');
+        streamModeThumb.classList.add('translate-x-4');
+      } else {
+        streamModeToggle.setAttribute('aria-checked', 'false');
+        streamModeToggle.classList.remove('bg-brand-accent');
+        streamModeToggle.classList.add('bg-brand-border');
+        streamModeThumb.classList.remove('translate-x-4');
+        streamModeThumb.classList.add('translate-x-0');
+      }
+    }
+    
+    streamModeToggle.addEventListener('click', () => {
+      streamModeEnabled = !streamModeEnabled;
+      localStorage.setItem('wren_stream_mode', streamModeEnabled ? 'messages' : 'updates');
+      updateToggleUI();
+    });
+    
+    updateToggleUI();
+
+    window.fillPrompt = function(text) {
+      promptInput.value = text;
+      promptInput.focus();
+    };
+
+    chatPromptInput.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+    });
+
+    sendBtn.addEventListener('click', () => {
+      const q = promptInput.value.trim();
+      if (!q) return;
+      startConversation(q);
+      promptInput.value = '';
+    });
+
+    promptInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendBtn.click();
+      }
+    });
+
+    chatSendBtn.addEventListener('click', () => {
+      const q = chatPromptInput.value.trim();
+      if (!q) return;
+      addMessagePair(q);
+      chatPromptInput.value = '';
+      chatPromptInput.style.height = 'auto';
+    });
+
+    chatPromptInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        chatSendBtn.click();
+      }
+    });
+
+    let logsSidebarOpen = false;
+
+    window.toggleLogsSidebar = function(forceState) {
+      const sidebar = document.getElementById('logs-sidebar');
+      const messageCol = document.getElementById('message-container');
+      const toggleBtnText = document.getElementById('toggle-logs-text');
+      const toggleBtn = document.querySelector('[onclick="toggleLogsSidebar()"]');
+      
+      if (!sidebar || !messageCol) return;
+      
+      if (typeof forceState === 'boolean') {
+        logsSidebarOpen = forceState;
+      } else {
+        logsSidebarOpen = !logsSidebarOpen;
+      }
+
+      if (logsSidebarOpen) {
+        sidebar.classList.remove('hidden');
+        messageCol.classList.remove('lg:col-span-3');
+        messageCol.classList.add('lg:col-span-2');
+        if (toggleBtnText) toggleBtnText.textContent = 'Hide Logs';
+        if (toggleBtn) {
+          toggleBtn.classList.remove('ring-2', 'ring-cyan-500/50', 'animate-pulse', 'border-cyan-500/40');
+        }
+      } else {
+        sidebar.classList.add('hidden');
+        messageCol.classList.remove('lg:col-span-2');
+        messageCol.classList.add('lg:col-span-3');
+        if (toggleBtnText) toggleBtnText.textContent = 'Show Logs';
+      }
+    };
+
+    window.resetToLanding = function() {
+      toggleLogsSidebar(false);
+
+      const mainContainer = document.getElementById('main-container');
+      if (mainContainer) {
+        mainContainer.classList.remove('max-w-7xl', 'lg:px-12');
+        mainContainer.classList.add('max-w-4xl');
+      }
+
+      chatZone.classList.add('hidden');
+      chatStickyBottom.classList.add('hidden');
+      messageContainer.innerHTML = '';
+      document.getElementById('sidebar-logs-container').innerHTML = `
+        <div id="empty-logs-placeholder" class="text-center py-8 text-brand-textSecondary/60 italic text-[11px]">
+          No database tools running yet.
+        </div>
+      `;
+      const badge = document.getElementById('log-count-badge');
+      if (badge) {
+        badge.dataset.count = '0';
+        badge.textContent = '0';
+      }
+
+      landingZone.classList.remove('hidden');
+    };
+
+    function startConversation(firstQuestion) {
+      toggleLogsSidebar(false);
+
+      const mainContainer = document.getElementById('main-container');
+      if (mainContainer) {
+        mainContainer.classList.remove('max-w-4xl');
+        mainContainer.classList.add('max-w-7xl', 'lg:px-12');
+      }
+
+      landingZone.classList.add('hidden');
+      chatZone.classList.remove('hidden');
+      chatStickyBottom.classList.remove('hidden');
+
+      document.getElementById('sidebar-logs-container').innerHTML = `
+        <div id="empty-logs-placeholder" class="text-center py-8 text-brand-textSecondary/60 italic text-[11px]">
+          No database tools running yet.
+        </div>
+      `;
+      const badge = document.getElementById('log-count-badge');
+      if (badge) {
+        badge.dataset.count = '0';
+        badge.textContent = '0';
+      }
+
+      addMessagePair(firstQuestion);
+    }
+
+    function scrollToBottom(isSmooth = false) {
+      const container = document.getElementById('workspace-scroll-container');
+      if (container) {
+        container.scrollTo({
+          top: container.scrollHeight,
+          behavior: isSmooth ? 'smooth' : 'auto'
+        });
+      }
+    }
+
+    function addMessagePair(question) {
+      const emptyPlaceholder = messageContainer.querySelector('.text-brand-textSecondary\\/50');
+      if (emptyPlaceholder) {
+        messageContainer.innerHTML = '';
+      }
+
+      const userDiv = document.createElement('div');
+      userDiv.className = 'flex justify-end';
+      userDiv.innerHTML = `
+        <div class="max-w-xl bg-slate-100 border border-slate-200/80 rounded-2xl px-4 py-2.5 text-sm text-brand-textPrimary shadow-sm">
+          ${escapeHtml(question)}
+        </div>
+      `;
+      messageContainer.appendChild(userDiv);
+      scrollToBottom(true);
+
+      const agentDiv = document.createElement('div');
+      agentDiv.className = 'space-y-4 max-w-3xl py-2';
+      
+      const thinkingContainer = document.createElement('div');
+      const textContainer = document.createElement('div');
+      textContainer.className = 'prose prose-sm max-w-none leading-relaxed text-brand-textPrimary';
+      
+      agentDiv.appendChild(thinkingContainer);
+      agentDiv.appendChild(textContainer);
+      messageContainer.appendChild(agentDiv);
+      
+      streamAnswer(question, thinkingContainer, textContainer);
+    }
+
+    let activeAbortController = null;
+
+    async function streamAnswer(question, thinkEl, textEl) {
+      let thinkingBuffer = '';
+      let markdownBuffer = '';
+      let activeThinkingSummary = null;
+      let activeThinkingContent = null;
+      let toolCallCount = 0;
+
+      let textQueue = [];
+      let thinkingQueue = [];
+      let isTextTyping = false;
+      let isThinkingTyping = false;
+      let isStreamFinished = false;
+
+      function processTextQueue() {
+        if (textQueue.length === 0) {
+          isTextTyping = false;
+          if (isStreamFinished) {
+            textEl.classList.remove('typing-active');
+          }
+          return;
+        }
+        isTextTyping = true;
+        
+        const token = textQueue.shift();
+        markdownBuffer += token;
+        textEl.innerHTML = marked.parse(markdownBuffer);
+        scrollToBottom();
+        
+        const delay = textQueue.length > 30 ? 2 : (textQueue.length > 10 ? 8 : 18);
+        setTimeout(processTextQueue, delay);
+      }
+
+      function processThinkingQueue() {
+        if (thinkingQueue.length === 0) {
+          isThinkingTyping = false;
+          if (isStreamFinished) {
+            if (activeThinkingContent) {
+              activeThinkingContent.classList.remove('thinking-active');
+            }
+          }
+          return;
+        }
+        isThinkingTyping = true;
+        
+        const token = thinkingQueue.shift();
+        thinkingBuffer += token;
+        activeThinkingContent.textContent = thinkingBuffer;
+        scrollToBottom();
+        
+        const delay = thinkingQueue.length > 30 ? 2 : (thinkingQueue.length > 10 ? 8 : 18);
+        setTimeout(processThinkingQueue, delay);
+      }
+
+      textEl.classList.add('typing-active');
+
+      if (activeAbortController) {
+        try {
+          activeAbortController.abort();
+        } catch (e) {
+          console.log("Error aborting previous query:", e);
+        }
+      }
+      activeAbortController = new AbortController();
+      
+      try {
+        const response = await fetch(`${API_HOST}/chat/stream`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          signal: activeAbortController.signal,
+          body: JSON.stringify({
+            project_id: activeProjectId,
+            question: question,
+            thread_id: currentThreadId,
+            provider: document.getElementById('provider-select')?.value || 'minimax',
+            thinking_level: document.getElementById('thinking-select')?.value || 'off',
+            stream_mode: streamModeEnabled ? 'messages' : 'updates'
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error(`API stream error status: ${response.status}`);
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder('utf-8');
+        let buffer = '';
+
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const parts = buffer.split('\n\n');
+          buffer = parts.pop();
+
+          for (const chunk of parts) {
+            if (!chunk.trim()) continue;
+
+            let eventType = 'message';
+            let dataStr = '';
+
+            const lines = chunk.split('\n');
+            for (const line of lines) {
+              if (line.startsWith('event:')) {
+                eventType = line.replace('event:', '').trim();
+              } else if (line.startsWith('data:')) {
+                dataStr = line.replace('data:', '').trim();
+              }
+            }
+
+            if (dataStr) {
+              try {
+                const parsed = JSON.parse(dataStr);
+                
+                if (eventType === 'thread_id') {
+                  currentThreadId = parsed.thread_id;
+                  refreshSessionsList();
+                }
+
+                else if (eventType === 'thinking') {
+                  if (!activeThinkingSummary) {
+                    thinkEl.innerHTML = `
+                      <details open class="mb-3 bg-brand-card/45 border border-brand-border rounded-xl p-3.5 text-xs text-brand-textSecondary shadow-inner transition duration-200">
+                        <summary class="cursor-pointer font-medium select-none hover:text-brand-textPrimary flex items-center gap-2">
+                          <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-500/80 animate-pulse"></span>
+                          <span>Thinking Process</span>
+                        </summary>
+                        <div id="think-content" class="mt-2.5 pl-3 border-l border-brand-border/60 space-y-1.5 text-[11px] leading-relaxed text-brand-textSecondary/90 font-mono whitespace-pre-wrap"></div>
+                      </details>
+                    `;
+                    activeThinkingSummary = thinkEl.querySelector('summary');
+                    activeThinkingContent = thinkEl.querySelector('#think-content');
+                    activeThinkingContent.classList.add('thinking-active');
+                  }
+                  
+                  const tokens = parsed.thinking.match(/(\s+|\S+)/g) || [parsed.thinking];
+                  for (const token of tokens) {
+                    thinkingQueue.push(token);
+                  }
+                  if (!isThinkingTyping) {
+                    processThinkingQueue();
+                  }
+                } 
+                
+                else if (eventType === 'tool_call') {
+                  toolCallCount++;
+
+                  const badge = document.getElementById('log-count-badge');
+                  if (badge) {
+                    badge.dataset.count = toolCallCount;
+                    badge.textContent = toolCallCount;
+                  }
+
+                  const toggleBtn = document.querySelector('[onclick="toggleLogsSidebar()"]');
+                  if (toggleBtn && !logsSidebarOpen) {
+                    toggleBtn.classList.add('ring-2', 'ring-cyan-500/50', 'animate-pulse', 'border-cyan-500/40');
+                  }
+
+                  const placeholder = document.getElementById('empty-logs-placeholder');
+                  if (placeholder) placeholder.classList.add('hidden');
+
+                  const toolDiv = document.createElement('div');
+                  toolDiv.id = `tool-log-${toolCallCount}`;
+                  toolDiv.className = 'bg-brand-card border border-brand-border rounded-xl p-3 text-xs shadow-sm transition duration-200 hover:border-brand-accent/40 flex flex-col space-y-2';
+                  
+                  let inputSnippet = '';
+                  if (parsed.input) {
+                    let codeText = JSON.stringify(parsed.input, null, 2);
+                    if (parsed.input.query) {
+                      codeText = parsed.input.query;
+                    }
+                    inputSnippet = `<pre class="mt-2 p-2 bg-brand-bg border border-brand-border/40 rounded text-[10px] text-brand-accent font-mono overflow-x-auto whitespace-pre-wrap">${escapeHtml(codeText)}</pre>`;
+                  }
+
+                  toolDiv.innerHTML = `
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-2 font-medium text-brand-accent">
+                        <span class="text-xs">⚙</span>
+                        <span>${escapeHtml(parsed.name)}</span>
+                      </div>
+                      <span class="text-[9px] text-brand-textSecondary bg-brand-bg border border-brand-border/50 px-1.5 py-0.5 rounded font-mono">ARGS</span>
+                    </div>
+                    ${inputSnippet}
+                    <div class="tool-result-container text-[10px] text-brand-textSecondary mt-2">
+                      <div class="animate-pulse flex items-center gap-1.5 text-brand-textSecondary/50 italic text-[9px]">
+                        <span class="w-1 h-1 rounded-full bg-brand-accent/70"></span> Running query...
+                      </div>
+                    </div>
+                  `;
+                  document.getElementById('sidebar-logs-container').appendChild(toolDiv);
+                  
+                  const logsScroll = document.getElementById('sidebar-logs-container');
+                  logsScroll.scrollTop = logsScroll.scrollHeight;
+                } 
+                
+                else if (eventType === 'tool_result') {
+                  const currentToolCard = document.getElementById(`tool-log-${toolCallCount}`);
+                  if (currentToolCard) {
+                    const resultContainer = currentToolCard.querySelector('.tool-result-container');
+                    if (resultContainer) {
+                      let dataTable = '';
+                      if (parsed.content && typeof parsed.content === 'object') {
+                        if (Array.isArray(parsed.content)) {
+                           dataTable = renderArrayTable(parsed.content);
+                        } else {
+                          dataTable = `<pre class="p-2 bg-brand-bg border border-brand-border/60 rounded text-[9px] text-blue-700 font-mono overflow-x-auto">${escapeHtml(JSON.stringify(parsed.content, null, 2))}</pre>`;
+                        }
+                      } else {
+                        dataTable = `<div class="whitespace-pre-wrap leading-relaxed text-[10px]">${escapeHtml(String(parsed.content))}</div>`;
+                      }
+
+                      resultContainer.innerHTML = `
+                        <details class="border-t border-brand-border/40 pt-2.5">
+                          <summary class="cursor-pointer font-semibold text-blue-700 hover:text-blue-600 flex items-center justify-between select-none">
+                            <span class="flex items-center gap-1">✓ Output Result</span>
+                            <span class="text-[8px] bg-brand-border/30 px-1 py-0.5 rounded text-brand-textSecondary">Expand</span>
+                          </summary>
+                          <div class="overflow-x-auto mt-2 max-h-48 overflow-y-auto">${dataTable}</div>
+                        </details>
+                      `;
+                    }
+                  }
+                } 
+                
+                else if (eventType === 'text') {
+                  if (activeThinkingContent) {
+                    activeThinkingContent.classList.remove('thinking-active');
+                  }
+                  // Keep the thinking block open and change status indicator to complete
+                  const statusDot = thinkEl.querySelector('summary span');
+                  const statusText = thinkEl.querySelector('summary span + span');
+                  if (statusDot && statusDot.classList.contains('bg-amber-500/80')) {
+                    statusDot.className = 'inline-block w-1.5 h-1.5 rounded-full bg-blue-500';
+                  }
+                  if (statusText && statusText.textContent === 'Thinking Process') {
+                    statusText.textContent = 'Thinking Process (Complete)';
+                  }
+
+                  const tokens = parsed.text.match(/(\s+|\S+)/g) || [parsed.text];
+                  for (const token of tokens) {
+                    textQueue.push(token);
+                  }
+                  if (!isTextTyping) {
+                    processTextQueue();
+                  }
+                } 
+                
+                else if (eventType === 'error') {
+                  showStreamError(textEl, parsed.error || 'Unknown streaming agent failure');
+                }
+              } catch (e) {
+                console.error('Error parsing SSE event chunk:', e, dataStr);
+              }
+            }
+          }
+        }
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          console.log('Successfully aborted previous request stream.');
+          return;
+        }
+        console.error('Error during SSE stream fetch:', err);
+        showStreamError(textEl, 'Network disconnect. Verify your Python backend is active and CORS headers are serving properly.');
+      } finally {
+        isStreamFinished = true;
+        if (activeAbortController && activeAbortController.signal.aborted) {
+          // Keep it
+        } else {
+          activeAbortController = null;
+        }
+      }
+    }
+
+    function renderArrayTable(arr) {
+      if (arr.length === 0) return '<div class="text-[10px] text-brand-textSecondary italic">Empty dataset returned.</div>';
+      
+      const keys = Object.keys(arr[0]);
+      let html = `<table class="min-w-full divide-y divide-brand-border text-[11px] text-brand-textPrimary mt-1.5 border border-brand-border/60">
+        <thead class="bg-slate-100"><tr>`;
+      
+      keys.forEach(k => {
+        html += `<th class="px-2.5 py-1.5 text-left font-semibold text-brand-textPrimary border-b border-brand-border">${escapeHtml(k)}</th>`;
+      });
+      html += `</tr></thead><tbody class="divide-y divide-brand-border/40">`;
+      
+      arr.forEach((row, rIdx) => {
+        html += `<tr class="${rIdx % 2 === 0 ? '' : 'bg-brand-bg/60'}">`;
+        keys.forEach(k => {
+          html += `<td class="px-2.5 py-1.5 border-b border-brand-border/40">${escapeHtml(String(row[k] ?? ''))}</td>`;
+        });
+        html += `</tr>`;
+      });
+      
+      html += `</tbody></table>`;
+      return html;
+    }
+
+    function showStreamError(containerEl, msg) {
+      containerEl.innerHTML = `
+        <div class="bg-red-50 border border-red-200 rounded-xl p-4 text-xs text-red-700 leading-relaxed">
+          <span class="font-bold flex items-center gap-1.5 mb-1 text-red-600">
+            <span class="text-sm">⚠</span> Connection Error
+          </span>
+          ${escapeHtml(msg)}
+        </div>
+      `;
+      messageContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+
+    function escapeHtml(string) {
+      const matchHtmlRegExp = /["'&<>]/;
+      const str = '' + string;
+      const match = matchHtmlRegExp.exec(str);
+      if (!match) return str;
+
+      let escape;
+      let html = '';
+      let index = 0;
+      let lastIndex = 0;
+
+      for (index = match.index; index < str.length; index++) {
+        switch (str.charCodeAt(index)) {
+          case 34: // "
+            escape = '&amp;quot;';
+            break;
+          case 38: // &
+            escape = '&amp;amp;';
+            break;
+          case 39: // '
+            escape = '&#39;';
+            break;
+          case 60: // <
+            escape = '&amp;lt;';
+            break;
+          case 62: // >
+            escape = '&amp;gt;';
+            break;
+          default:
+            continue;
+        }
+
+        if (lastIndex !== index) {
+          html += str.substring(lastIndex, index);
+        }
+
+        lastIndex = index + 1;
+        html += escape;
+      }
+
+      return lastIndex !== index
+        ? html + str.substring(lastIndex, index)
+        : html;
+    }
+
+    updateThinkingVisibility();
+    loadProjects();
+  </script>
+</body>
+</html>
