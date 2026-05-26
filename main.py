@@ -12,6 +12,7 @@ import json
 import sqlite3
 from langgraph.checkpoint.sqlite.aio import AsyncSqliteSaver
 from dotenv import load_dotenv
+from wren_api.forecasting_tools import load_forecasting_models
 
 load_dotenv()
 
@@ -155,7 +156,57 @@ class CustomWrenToolkit(WrenToolkit):
                 print(f"[TOOL wren_create_bar_chart] ERROR failed to generate bar chart: {str(e)}")
                 return f"Error generating bar chart: {str(e)}"
 
-        tools.extend([wren_query, wren_export_csv, wren_create_bar_chart])
+        @tool("global_forecast")
+        def global_forecast(material_id: int) -> dict:
+            """Forecast next week's total order quantity for a specific product across all locations.
+            Use this tool when the user explicitly asks to predict, forecast, or estimate future sales
+            for a product WITHOUT specifying a city or location.
+            Input: material_id (integer, e.g., 20187)
+            Returns: prediction with historical data and confidence interval.
+            """
+            print(f"[TOOL global_forecast] Invoked for material_id: {material_id}")
+            from wren_api.forecasting_tools import global_forecast_impl
+            return global_forecast_impl(material_id)
+
+        @tool("location_forecast")
+        def location_forecast(material_id: int, city: str) -> dict:
+            """Forecast next week's order quantity for a specific product IN A SPECIFIC CITY.
+            Use this tool when the user explicitly asks to predict, forecast, or estimate future sales
+            for a product IN A SPECIFIC CITY or location.
+            Input: material_id (integer, e.g., 20187) and city (string, e.g., 'SURAT' or 'AHMEDABAD').
+            The city name will be automatically normalized (e.g., 'BARODA' -> 'VADODARA', 'THOR' -> 'THOL').
+            Returns: prediction with historical data and confidence interval.
+            """
+            print(f"[TOOL location_forecast] Invoked for material_id: {material_id}, city: {city}")
+            from wren_api.forecasting_tools import location_forecast_impl
+            return location_forecast_impl(material_id, city)
+
+        @tool("customer_product_forecast")
+        def customer_product_forecast(customer_id: int, material_id: int) -> dict:
+            """Forecast next week's order quantity for a specific customer and product combination.
+            Use this tool when the user asks to predict, forecast, or estimate future sales
+            for a specific CUSTOMER and PRODUCT together (e.g., "what will customer X buy of product Y?").
+            Input: customer_id (integer) and material_id (integer).
+            Returns: prediction with historical data and confidence interval.
+            """
+            print(f"[TOOL customer_product_forecast] Invoked for customer_id: {customer_id}, material_id: {material_id}")
+            from wren_api.forecasting_tools import customer_product_forecast_impl
+            return customer_product_forecast_impl(customer_id, material_id)
+
+        @tool("customer_forecast")
+        def customer_forecast(customer_id: int) -> dict:
+            """Forecast next week's TOTAL order quantity for a specific customer across ALL products.
+            Use this tool when the user asks to predict, forecast, or estimate total future volume
+            for a specific CUSTOMER (e.g., "what will customer X order next week?").
+            This aggregates all product-level predictions for that customer.
+            Input: customer_id (integer).
+            Returns: total predicted quantity with top products breakdown.
+            """
+            print(f"[TOOL customer_forecast] Invoked for customer_id: {customer_id}")
+            from wren_api.forecasting_tools import customer_forecast_impl
+            return customer_forecast_impl(customer_id)
+
+        tools.extend([wren_query, wren_export_csv, wren_create_bar_chart, global_forecast, location_forecast, customer_product_forecast, customer_forecast])
         return tools
 
 # Project configs
@@ -168,10 +219,10 @@ PROJECTS = {
     #     "path": "/home/web-h-063/riddhi-gsp",
     #     "description": "Riddhi GSP Wren project",
     # },
-    "riddhi-gsp-gemini": {
-        "path": "/home/web-h-063/riddhi-gsp-test",
-        "description": "Riddhi GSP Gemini project",
-    },
+    # "riddhi-gsp-gemini": {
+    #     "path": "/home/web-h-063/riddhi-gsp-test",
+    #     "description": "Riddhi GSP Gemini project",
+    # },
     "customer-sales": {
         "path": "/home/web-h-063/sales_wren",
         "description": "Customer Sales project",
@@ -252,6 +303,10 @@ async def lifespan(app: FastAPI):
                 print(f"Initialized project: {project_id}")
             except Exception as e:
                 print(f"Failed to initialize {project_id}: {e}")
+
+        # Load forecasting models at startup
+        load_forecasting_models()
+        print("Forecasting models loaded at startup")
 
         yield
 
@@ -335,6 +390,10 @@ def get_custom_system_prompt(toolkit) -> str:
         "- `wren_query`: Execute SQL through the Wren semantic layer and return a preview of the rows.\n"
         "- `wren_export_csv`: Execute SQL and export the entire dataset as a downloadable CSV file.\n"
         "- `wren_create_bar_chart`: Execute SQL and create a beautiful bar chart image saved on disk, returning the Markdown image link.\n\n"
+        "- `global_forecast`: Forecast next week's total order quantity for a product across all locations. Use ONLY when user asks to predict/forecast sales WITHOUT specifying a city. Input: material_id (int).\n"
+        "- `location_forecast`: Forecast next week's order quantity for a product in a specific city. Use ONLY when user asks to predict/forecast sales IN A SPECIFIC CITY or location. Input: material_id (int) and city (str).\n"
+        "- `customer_product_forecast`: Forecast next week's order quantity for a specific CUSTOMER and PRODUCT. Use when user asks about a specific customer's demand for a specific product. Input: customer_id (int) and material_id (int).\n"
+        "- `customer_forecast`: Forecast next week's TOTAL order quantity for a customer across ALL products. Use when user asks about total customer volume. Input: customer_id (int).\n\n"
         "CSV EXPORT RULE: The `wren_export_csv` tool executes a SQL query, automatically exports the entire dataset as a CSV file, and returns a download link. Whenever a user asks to retrieve, download, or export a detailed list, structured rows, or tabular data, you MUST call `wren_export_csv` and provide the resulting download link verbatim in your final response.\n\n"
         "PROACTIVE RECORD EXPORTING RULE: To deliver a premium and proactive experience, when the user asks an aggregate or count question about a specific subset of records (e.g., 'How many customers were created in the last 30 days?' or 'How many orders are pending?'), you should:\n"
         "1. Call `wren_query` with the aggregate COUNT SQL to retrieve the count value.\n"
@@ -347,6 +406,18 @@ def get_custom_system_prompt(toolkit) -> str:
         "3. The numerical metric column name (`y_column`).\n"
         "4. A highly descriptive title (`title`).\n"
         "Include the returned markdown image syntax verbatim in your final response. Do NOT generate a bar chart for simple, single-metric queries with no groupings (e.g., 'How many total customers do we have?' should just be a simple text count, not a chart with a single bar).\n\n"
+        "FORECASTING RULE: Only call forecasting tools when the user EXPLICITLY asks to predict, forecast, or estimate future sales or demand. Do NOT call forecasting tools for historical data questions.\n"
+        "- If user asks \"what will be the sales next week for product X\" -> call `global_forecast`\n"
+        "- If user asks \"what will be the sales of product X in SURAT next week\" -> call `location_forecast`\n"
+        "- If user asks \"what will customer X buy of product Y next week\" -> call `customer_product_forecast`\n"
+        "- If user asks \"what will customer X order next week\" or \"customer X total volume\" -> call `customer_forecast`\n"
+        "- If user asks \"what were the sales last week\" or any historical question -> use `wren_query` ONLY\n\n"
+        "When presenting a forecast to the user, follow this structure:\n"
+        "1. State the prediction clearly: \"Based on the past {N} weeks of sales data...\"\n"
+        "2. Show the historical trend (last N weeks qty)\n"
+        "3. State the prediction with confidence interval\n"
+        "4. Explain model used (global or location-based)\n\n"
+        "FORECASTING CONFIDENCE: Predictions include a confidence interval based on model RMSE. For global forecasts the interval is ±312,286 units, for location forecasts ±28,248 units, and for customer-product forecasts ±2,130 units. Wider intervals indicate higher uncertainty.\n\n"
         "CRITICAL: At the very end of your final response, you MUST always provide a clear 'Citations & SQL Explanation' section. In this section, list exactly which database tables and fields/columns were used to get these results, and briefly explain the logic of the SQL query that was executed."
     )
     

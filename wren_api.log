@@ -1,0 +1,121 @@
+nohup: ignoring input
+INFO:     Will watch for changes in these directories: ['/home/web-h-063/Documents/auto-data-intelligence']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [2465319] using StatReload
+INFO:     Started server process [2465450]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+Initialized project: customer-sales
+Forecasting models loaded at startup
+INFO:     110.226.96.28:0 - "GET / HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /projects HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_bd629a51?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_ef92baa2?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_1b6de572?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_9d1ae992?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_ff69b34a?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_04b93188?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_04b93188?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_ef92baa2?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_1b6de572?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_5cdc3f73?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_15b15f05?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_cdcfaf66?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     110.226.96.28:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+Both GOOGLE_API_KEY and GEMINI_API_KEY WARNING:  WatchFiles detected changes in '.venv/lib/python3.12/site-packages/langchain_aws/vectorstores/valkey/base.py', '.venv/lib/python3.12/site-packages/langchain_aws/vectorstores/inmemorydb/schema.py', '.venv/lib/python3.12/site-packages/langchain_aws/vectorstores/valkey/filters.py', '.venv/lib/python3.12/site-packages/langchain_aws/utilities/utils.py', '.venv/lib/python3.12/site-packages/langchain_aws/graphs/neptune_rdf_graph.py', '.venv/lib/python3.12/site-packages/langchain_aws/vectorstores/__init__.py', '.venv/lib/python3.12/site-packages/langchain_aws/graphs/__init__.py', '.venv/lib/python3.12/site-packages/langchain_aws/vectorstores/s3_vectors/__init__.py', '.venv/lib/python3.12/site-packages/langchain_aws/middleware/__init__.py', '.venv/lib/python3.12/site-packages/langchain_aws/document_compressors/rerank.py', '.venv/lib/python3.12/site-packages/langchain_aws/agents/__init__.py', '.venv/lib/python3.12/site-packages/langchain_aws/utilities/redis.py', '.venv/lib/python3.12/site-packages/langchain_aws/vectorstores/inmemorydb/__init__.py', '.venv/lib/python3.12/site-packages/langchain_aws/utils.py', '.venv/lib/python3.12/site-packages/langchain_aws/retrievers/s3_vectors.py', '.venv/lib/python3.12/site-packagINFO:     110.226.96.28:0 - "GET /projects HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /projects HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+INFO:     111.93.75.118:0 - "GET / HTTP/1.1" 200 OK
+INFO:     111.93.75.118:0 - "GET /projects HTTP/1.1" 200 OK
+INFO:     111.93.75.118:0 - "GET /chat/threads HTTP/1.1" 200 OK
+INFO:     111.93.75.118:0 - "GET /chat/history/customer-sales/session_72a8b360?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     111.93.75.118:0 - "GET /chat/history/customer-sales/session_72a8b360?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     111.93.75.118:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     111.93.75.118:0 - "GET /chat/threads HTTP/1.1" 200 OK
+[TOOL wren_query] Invoked with SQL query:
+SELECT * FROM sales_order_header WHERE sales_document = 2010099827
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 1 rows, 225 columns.
+[TOOL wren_query] Invoked with SQL query:
+SELECT * FROM sales_order_items WHERE sales_document = 2010099827
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 2 rows, 134 columns.
+INFO:     111.93.75.118:0 - "GET /chat/history/customer-sales/session_e4710e49?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     111.93.75.118:0 - "GET /chat/history/customer-sales/session_b9ec3106?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     111.93.75.118:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     111.93.75.118:0 - "GET /chat/threads HTTP/1.1" 200 OK
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    billing_month,
+    SUM(total_revenue) as total_revenue,
+    SUM(total_qty) as total_quantity,
+    COUNT(DISTINCT customer_id) as customer_count
+FROM vw_revenue_by_customer_month
+WHERE billing_month >= '2025-10-01' AND billing_month <= '2026-01-31'
+GROUP BY billing_month
+ORDER BY billing_month
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 1 rows, 4 columns.
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    billing_month,
+    SUM(total_revenue) as total_revenue,
+    SUM(total_qty) as total_quantity,
+    COUNT(DISTINCT customer_id) as customer_count
+FROM vw_revenue_by_customer_month
+WHERE billing_month >= '2025-01-01' AND billing_month <= '2026-01-31'
+GROUP BY billing_month
+ORDER BY billing_month
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 1 rows, 4 columns.
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    DATE_TRUNC('month', order_date) as month,
+    SUM(order_net_value) as total_order_value,
+    COUNT(*) as order_count
+FROM vw_sales_orders
+GROUP BY month
+ORDER BY month DESC
+LIMIT 12
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 2 rows, 3 columns.
+INFO:     111.93.75.118:0 - "GET /chat/history/customer-sales/session_f3e754f5?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     111.93.75.118:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     111.93.75.118:0 - "GET /chat/threads HTTP/1.1" 200 OK
+/home/web-h-063/Documents/auto-data-intelligence/wren_api/forecasting_tools.py:91: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  df = pd.read_sql(query, conn, params=(material_id, city_normalized))
+[TOOL wren_query] Invoked with SQL query:
+SELECT material, item_description FROM vw_material_revenue WHERE item_description LIKE '%GN OIL%' LIMIT 10
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 10 rows, 2 columns.
+[TOOL location_forecast] Invoked for material_id: 20201, city: SURAT
+INFO:     111.93.75.118:0 - "GET /chat/history/customer-sales/session_020dc663?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     111.93.75.118:0 - "GET /chat/history/customer-sales/session_f3e754f5?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     111.93.75.118:0 - "GET /chat/history/customer-sales/session_020dc663?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     111.93.75.118:0 - "GET /chat/history/customer-sales/session_97f4c1fe?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET / HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /projects HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     110.226.96.28:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     110.226.96.28:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     110.226.96.28:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/web-h-063/Documents/auto-data-intelligence/wren_api/main.py", line 7, in <module>
+    from langchain_anthropic import ChatAnthropic
+ModuleNotFoundError: No module named 'langchain_anthropic'
