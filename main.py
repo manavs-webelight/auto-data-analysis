@@ -16,6 +16,10 @@ from wren_api.forecasting_tools import load_forecasting_models
 
 load_dotenv()
 
+# Absolute paths for exports and database
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
+EXPORTS_DIR = os.path.join(APP_DIR, "exports")
+
 # Initialize SQLite connection once for list_chat_threads
 conn = sqlite3.connect("chat_memory.db", check_same_thread=False)
 checkpointer = None
@@ -64,12 +68,12 @@ class CustomWrenToolkit(WrenToolkit):
                 table = self.query(sql)
                 print(f"[TOOL wren_export_csv] Successfully executed query. Retrieved PyArrow Table: {table.num_rows} rows, {table.num_columns} columns.")
                 df = table.to_pandas()
-                os.makedirs("exports", exist_ok=True)
+                os.makedirs(EXPORTS_DIR, exist_ok=True)
                 filename = f"export_{uuid.uuid4().hex[:8]}.csv"
-                filepath = os.path.join("exports", filename)
+                filepath = os.path.join(EXPORTS_DIR, filename)
                 df.to_csv(filepath, index=False)
                 print(f"[TOOL wren_export_csv] Exported DataFrame converted and saved to disk at: {filepath}")
-                return f"CSV successfully exported! Download link: /exports/{filename}"
+                return f"CSV successfully exported! [Download CSV](/exports/{filename})"
             except Exception as e:
                 print(f"[TOOL wren_export_csv] ERROR failed to export CSV: {str(e)}")
                 return f"Error exporting CSV: {str(e)}"
@@ -137,9 +141,9 @@ class CustomWrenToolkit(WrenToolkit):
                 plt.xticks(rotation=45, ha='right')
                 plt.tight_layout()
                 
-                os.makedirs("exports", exist_ok=True)
+                os.makedirs(EXPORTS_DIR, exist_ok=True)
                 filename = f"chart_{uuid.uuid4().hex[:8]}.png"
-                filepath = os.path.join("exports", filename)
+                filepath = os.path.join(EXPORTS_DIR, filename)
                 
                 plt.savefig(
                     filepath, 
@@ -234,9 +238,9 @@ _toolkit_cache: dict[str, WrenToolkit] = {}
 _models = {}
 
 
-def get_model(provider: str = "minimax", thinking_level: str | None = None):
+def get_model(provider: str = "gemini-3.1-flash-lite", thinking_level: str | None = None):
     global _models
-    provider = (provider or "minimax").lower()
+    provider = (provider or "gemini-3.1-flash-lite").lower()
     if provider == "gemini":
         provider = "gemini-2.5-flash"
     
@@ -321,8 +325,8 @@ app = FastAPI(title="Wren AI Agent API", lifespan=lifespan)
 
 # Mount static exports folder to serve generated CSV files
 from fastapi.staticfiles import StaticFiles
-os.makedirs("exports", exist_ok=True)
-app.mount("/exports", StaticFiles(directory="exports"), name="exports")
+os.makedirs(EXPORTS_DIR, exist_ok=True)
+app.mount("/exports", StaticFiles(directory=EXPORTS_DIR), name="exports")
 
 # Add CORS middleware to support standalone local HTML loads
 app.add_middleware(
@@ -526,16 +530,17 @@ def format_messages_chunk(chunk):
         if hasattr(message, "tool_call_chunks") and message.tool_call_chunks:
             for tc in message.tool_call_chunks:
                 if tc.get("name"):
-                    yield f"event: tool_call\ndata: {json.dumps({'name': tc['name'], 'input': {}})}\n\n"
+                    yield f"event: tool_call\ndata: {json.dumps({'id': tc.get('id'), 'name': tc['name'], 'input': {}})}\n\n"
 
     # Handle ToolMessage
     elif message.__class__.__name__ == "ToolMessage":
         if hasattr(message, "content"):
+            tool_id = getattr(message, "tool_call_id", None)
             try:
                 content = json.loads(message.content) if isinstance(message.content, str) else message.content
-                yield f"event: tool_result\ndata: {json.dumps({'tool': message.name, 'content': content})}\n\n"
+                yield f"event: tool_result\ndata: {json.dumps({'id': tool_id, 'tool': message.name, 'content': content})}\n\n"
             except:
-                yield f"event: tool_result\ndata: {json.dumps({'tool': message.name, 'content': str(message.content)})}\n\n"
+                yield f"event: tool_result\ndata: {json.dumps({'id': tool_id, 'tool': message.name, 'content': str(message.content)})}\n\n"
 
 
 def format_stream_event(event):
@@ -546,7 +551,7 @@ def format_stream_event(event):
             content = message.content if hasattr(message, "content") else str(message)
             if hasattr(message, "tool_calls") and message.tool_calls:
                 for tc in message.tool_calls:
-                    yield f"event: tool_call\ndata: {json.dumps({'name': tc['name'], 'input': tc.get('args', {})})}\n\n"
+                    yield f"event: tool_call\ndata: {json.dumps({'id': tc.get('id'), 'name': tc['name'], 'input': tc.get('args', {})})}\n\n"
             if hasattr(message, "content"):
                 if isinstance(message.content, str):
                     if message.content:
@@ -559,15 +564,16 @@ def format_stream_event(event):
                             elif block.get("type") == "text":
                                 yield f"event: text\ndata: {json.dumps({'text': block.get('text', '')})}\n\n"
                             elif block.get("type") == "tool_use":
-                                yield f"event: tool_call\ndata: {json.dumps({'name': block.get('name'), 'input': block.get('input')})}\n\n"
+                                yield f"event: tool_call\ndata: {json.dumps({'id': block.get('id'), 'name': block.get('name'), 'input': block.get('input')})}\n\n"
     elif "tools" in event:
         for message in event["tools"]["messages"]:
             if hasattr(message, "content"):
+                tool_id = getattr(message, "tool_call_id", None)
                 try:
                     content = json.loads(message.content) if isinstance(message.content, str) else message.content
-                    yield f"event: tool_result\ndata: {json.dumps({'tool': message.name, 'content': content})}\n\n"
+                    yield f"event: tool_result\ndata: {json.dumps({'id': tool_id, 'tool': message.name, 'content': content})}\n\n"
                 except:
-                    yield f"event: tool_result\ndata: {json.dumps({'tool': message.name, 'content': str(message.content)})}\n\n"
+                    yield f"event: tool_result\ndata: {json.dumps({'id': tool_id, 'tool': message.name, 'content': str(message.content)})}\n\n"
 
 
 @app.get("/chat/threads")
