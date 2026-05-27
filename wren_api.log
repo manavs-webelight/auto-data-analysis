@@ -26,96 +26,1380 @@ INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_cdcfaf66?p
 Loaded environment variables from /home/web-h-063/sales_wren/.env
 INFO:     110.226.96.28:0 - "POST /chat/stream HTTP/1.1" 200 OK
 INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
-Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
-Both GOOGLE_API_KEY and GEMINI_API_KEY WARNING:  WatchFiles detected changes in '.venv/lib/python3.12/site-packages/langchain_aws/vectorstores/valkey/base.py', '.venv/lib/python3.12/site-packages/langchain_aws/vectorstores/inmemorydb/schema.py', '.venv/lib/python3.12/site-packages/langchain_aws/vectorstores/valkey/filters.py', '.venv/lib/python3.12/site-packages/langchain_aws/utilities/utils.py', '.venv/lib/python3.12/site-packages/langchain_aws/graphs/neptune_rdf_graph.py', '.venv/lib/python3.12/site-packages/langchain_aws/vectorstores/__init__.py', '.venv/lib/python3.12/site-packages/langchain_aws/graphs/__init__.py', '.venv/lib/python3.12/site-packages/langchain_aws/vectorstores/s3_vectors/__init__.py', '.venv/lib/python3.12/site-packages/langchain_aws/middleware/__init__.py', '.venv/lib/python3.12/site-packages/langchain_aws/document_compressors/rerank.py', '.venv/lib/python3.12/site-packages/langchain_aws/agents/__init__.py', '.venv/lib/python3.12/site-packages/langchain_aws/utilities/redis.py', '.venv/lib/python3.12/site-packages/langchain_aws/vectorstores/inmemorydb/__init__.py', '.venv/lib/python3.12/site-packages/langchain_aws/utils.py', '.venv/lib/python3.12/site-packages/langchain_aws/retrievers/s3_vectors.py', '.venv/lib/python3.12/site-packagINFO:     110.226.96.28:0 - "GET /projects HTTP/1.1" 200 OK
-INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
-INFO:     110.226.96.28:0 - "GET /projects HTTP/1.1" 200 OK
-INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
-INFO:     111.93.75.118:0 - "GET / HTTP/1.1" 200 OK
-INFO:     111.93.75.118:0 - "GET /projects HTTP/1.1" 200 OK
-INFO:     111.93.75.118:0 - "GET /chat/threads HTTP/1.1" 200 OK
-INFO:     111.93.75.118:0 - "GET /chat/history/customer-sales/session_72a8b360?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
-INFO:     111.93.75.118:0 - "GET /chat/history/customer-sales/session_72a8b360?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
-Loaded environment variables from /home/web-h-063/sales_wren/.env
-INFO:     111.93.75.118:0 - "POST /chat/stream HTTP/1.1" 200 OK
-INFO:     111.93.75.118:0 - "GET /chat/threads HTTP/1.1" 200 OK
-[TOOL wren_query] Invoked with SQL query:
-SELECT * FROM sales_order_header WHERE sales_document = 2010099827
-[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 1 rows, 225 columns.
-[TOOL wren_query] Invoked with SQL query:
-SELECT * FROM sales_order_items WHERE sales_document = 2010099827
-[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 2 rows, 134 columns.
-INFO:     111.93.75.118:0 - "GET /chat/history/customer-sales/session_e4710e49?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
-INFO:     111.93.75.118:0 - "GET /chat/history/customer-sales/session_b9ec3106?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
-Loaded environment variables from /home/web-h-063/sales_wren/.env
-INFO:     111.93.75.118:0 - "POST /chat/stream HTTP/1.1" 200 OK
-INFO:     111.93.75.118:0 - "GET /chat/threads HTTP/1.1" 200 OK
-[TOOL wren_query] Invoked with SQL query:
-SELECT 
-    billing_month,
-    SUM(total_revenue) as total_revenue,
-    SUM(total_qty) as total_quantity,
-    COUNT(DISTINCT customer_id) as customer_count
-FROM vw_revenue_by_customer_month
-WHERE billing_month >= '2025-10-01' AND billing_month <= '2026-01-31'
-GROUP BY billing_month
-ORDER BY billing_month
-[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 1 rows, 4 columns.
-[TOOL wren_query] Invoked with SQL query:
-SELECT 
-    billing_month,
-    SUM(total_revenue) as total_revenue,
-    SUM(total_qty) as total_quantity,
-    COUNT(DISTINCT customer_id) as customer_count
-FROM vw_revenue_by_customer_month
-WHERE billing_month >= '2025-01-01' AND billing_month <= '2026-01-31'
-GROUP BY billing_month
-ORDER BY billing_month
-[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 1 rows, 4 columns.
-[TOOL wren_query] Invoked with SQL query:
-SELECT 
-    DATE_TRUNC('month', order_date) as month,
-    SUM(order_net_value) as total_order_value,
-    COUNT(*) as order_count
-FROM vw_sales_orders
-GROUP BY month
-ORDER BY month DESC
-LIMIT 12
-[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 2 rows, 3 columns.
-INFO:     111.93.75.118:0 - "GET /chat/history/customer-sales/session_f3e754f5?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
-Loaded environment variables from /home/web-h-063/sales_wren/.env
-INFO:     111.93.75.118:0 - "POST /chat/stream HTTP/1.1" 200 OK
-INFO:     111.93.75.118:0 - "GET /chat/threads HTTP/1.1" 200 OK
-/home/web-h-063/Documents/auto-data-intelligence/wren_api/forecasting_tools.py:91: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
-  df = pd.read_sql(query, conn, params=(material_id, city_normalized))
-[TOOL wren_query] Invoked with SQL query:
-SELECT material, item_description FROM vw_material_revenue WHERE item_description LIKE '%GN OIL%' LIMIT 10
-[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 10 rows, 2 columns.
-[TOOL location_forecast] Invoked for material_id: 20201, city: SURAT
-INFO:     111.93.75.118:0 - "GET /chat/history/customer-sales/session_020dc663?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
-INFO:     111.93.75.118:0 - "GET /chat/history/customer-sales/session_f3e754f5?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
-INFO:     111.93.75.118:0 - "GET /chat/history/customer-sales/session_020dc663?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
-INFO:     111.93.75.118:0 - "GET /chat/history/customer-sales/session_97f4c1fe?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
-INFO:     110.226.96.28:0 - "GET / HTTP/1.1" 200 OK
-INFO:     110.226.96.28:0 - "GET /projects HTTP/1.1" 200 OK
-INFO:     110.226.96.28:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
-Loaded environment variables from /home/web-h-063/sales_wren/.env
-INFO:     110.226.96.28:0 - "POST /chat/stream HTTP/1.1" 200 OK
-INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
-Loaded environment variables from /home/web-h-063/sales_wren/.env
-INFO:     110.226.96.28:0 - "POST /chat/stream HTTP/1.1" 200 OK
-INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
-Loaded environment variables from /home/web-h-063/sales_wren/.env
-INFO:     110.226.96.28:0 - "POST /chat/stream HTTP/1.1" 200 OK
-INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
-import(name[level:], package, level)
+Both GOOGLE_API_KEY and GEMINI_WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+Process SpawnProcess-2:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 75, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 79, in serve
+    await self._serve(sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 86, in _serve
+    config.load()
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/config.py", line 449, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
   File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
   File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
-  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
-  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
-  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
   File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
-  File "/home/web-h-063/Documents/auto-data-intelligence/wren_api/main.py", line 7, in <module>
-    from langchain_anthropic import ChatAnthropic
-ModuleNotFoundError: No module named 'langchain_anthropic'
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'wren_api'
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+Process SpawnProcess-3:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 75, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 79, in serve
+    await self._serve(sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 86, in _serve
+    config.load()
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/config.py", line 449, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'wren_api'
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+Process SpawnProcess-4:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 75, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 79, in serve
+    await self._serve(sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 86, in _serve
+    config.load()
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/config.py", line 449, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'wren_api'
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+Process SpawnProcess-5:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 75, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 79, in serve
+    await self._serve(sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 86, in _serve
+    config.load()
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/config.py", line 449, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'wren_api'
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+Process SpawnProcess-6:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 75, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 79, in serve
+    await self._serve(sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 86, in _serve
+    config.load()
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/config.py", line 449, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'wren_api'
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+Process SpawnProcess-7:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 75, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 79, in serve
+    await self._serve(sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 86, in _serve
+    config.load()
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/config.py", line 449, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'wren_api'
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+Process SpawnProcess-8:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 75, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 79, in serve
+    await self._serve(sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 86, in _serve
+    config.load()
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/config.py", line 449, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'wren_api'
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+Process SpawnProcess-9:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 75, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 79, in serve
+    await self._serve(sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 86, in _serve
+    config.load()
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/config.py", line 449, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'wren_api'
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+Process SpawnProcess-10:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 75, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 79, in serve
+    await self._serve(sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 86, in _serve
+    config.load()
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/config.py", line 449, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'wren_api'
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+Process SpawnProcess-11:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 75, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 79, in serve
+    await self._serve(sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 86, in _serve
+    config.load()
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/config.py", line 449, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'wren_api'
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+Process SpawnProcess-12:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 75, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 79, in serve
+    await self._serve(sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 86, in _serve
+    config.load()
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/config.py", line 449, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'wren_api'
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+Process SpawnProcess-13:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 75, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 79, in serve
+    await self._serve(sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 86, in _serve
+    config.load()
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/config.py", line 449, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'wren_api'
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+Process SpawnProcess-14:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 75, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 79, in serve
+    await self._serve(sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 86, in _serve
+    config.load()
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/config.py", line 449, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'wren_api'
+WARNING:  WatchFiles detected changes in 'main.py'. Reloading...
+Process SpawnProcess-15:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 75, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/_compat.py", line 60, in asyncio_run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 79, in serve
+    await self._serve(sockets)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/server.py", line 86, in _serve
+    config.load()
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/config.py", line 449, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/home/web-h-063/.globalvenv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'wren_api'
+plication startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'wren_api/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2626634]
+INFO:     Started server process [2627181]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+Initialized project: customer-sales
+Forecasting models loaded at startup
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     110.226.96.28:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     110.226.96.28:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     110.226.96.28:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET / HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /projects HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_14c13eb0?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /projects HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_14c13eb0?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET / HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /projects HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_f769a29b?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_c7c6f332?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_14c13eb0?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_b11ded2e?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_1bd070f3?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     110.226.96.28:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+[TOOL wren_query] Invoked with SQL query:
+SELECT material, item_description, material_group FROM vw_material_revenue WHERE LOWER(item_description) LIKE '%gn oil%'
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 10 rows, 3 columns.
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     110.226.96.28:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+/home/web-h-063/Documents/auto-data-intelligence/wren_api/forecasting_tools.py:91: UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+  df = pd.read_sql(query, conn, params=(material_id, city_normalized))
+[TOOL location_forecast] Invoked for material_id: 20201, city: SURAT
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     110.226.96.28:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET / HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /projects HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     110.226.96.28:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+[TOOL wren_query] Invoked with SQL query:
+SELECT sales_document as order_id FROM vw_sales_orders ORDER BY sales_document DESC LIMIT 5
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 5 rows, 1 columns.
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     110.226.96.28:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    sales_document AS "Order ID",
+    sales_document_type AS "Order Type",
+    order_date AS "Order Date",
+    order_created_on AS "Created On",
+    customer_id AS "Customer ID",
+    customer_name AS "Customer Name",
+    sales_office AS "Sales Office",
+    order_net_value AS "Net Value",
+    currency AS "Currency",
+    overall_status AS "Overall Status",
+    ovrl_delivery_status AS "Delivery Status",
+    billing_status AS "Billing Status",
+    delivery_block AS "Delivery Block",
+    billing_block AS "Billing Block",
+    order_reason AS "Order Reason"
+FROM vw_sales_orders
+WHERE sales_document = 6209000179
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    sales_document_item AS "Item #",
+    material AS "Material ID",
+    item_description AS "Description",
+    material_group AS "Material Group",
+    item_category AS "Item Category",
+    target_quantity AS "Target Qty",
+    target_quantity_uom AS "UOM",
+    base_unit_of_measure AS "Base Unit",
+    net_value AS "Item Net Value",
+    relevant_for_billing AS "Billing Relevant",
+    reason_for_rejection AS "Rejection Reason"
+FROM sales_order_items
+WHERE sales_document = 6209000179
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] transaction commit at the wrong nesting level: <psycopg.Transaction (active) [INTRANS] (host=localhost port=5438 user=postgres database=customer_sales) at 0x7aabac3c16a0> phase=SQL_EXECUTION
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] transaction commit at the wrong nesting level: <psycopg.Transaction '_pg3_2' (active) [INTRANS] (host=localhost port=5438 user=postgres database=customer_sales) at 0x7aabac3c1eb0> phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    sales_document AS "Order ID",
+    sales_document_type AS "Order Type",
+    order_date AS "Order Date",
+    order_created_on AS "Created On",
+    customer_id AS "Customer ID",
+    customer_name AS "Customer Name",
+    sales_office AS "Sales Office",
+    order_net_value AS "Net Value",
+    currency AS "Currency",
+    overall_status AS "Overall Status",
+    ovrl_delivery_status AS "Delivery Status",
+    billing_status AS "Billing Status",
+    delivery_block AS "Delivery Block",
+    billing_block AS "Billing Block",
+    order_reason AS "Order Reason"
+FROM vw_sales_orders
+WHERE sales_document = 6209000179
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 3 rows, 15 columns.
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    sales_document_item AS "Item #",
+    material AS "Material ID",
+    item_description AS "Description",
+    material_group AS "Material Group",
+    item_category AS "Item Category",
+    target_quantity AS "Target Qty",
+    target_quantity_uom AS "UOM",
+    base_unit_of_measure AS "Base Unit",
+    net_value AS "Item Net Value",
+    relevant_for_billing AS "Billing Relevant",
+    reason_for_rejection AS "Rejection Reason"
+FROM sales_order_items
+WHERE sales_document = 6209000179
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 3 rows, 11 columns.
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_9b95234c?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_c7c6f332?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/history/customer-sales/session_88753e29?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     110.226.96.28:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     110.226.96.28:0 - "GET /chat/threads HTTP/1.1" 200 OK
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    sales_document AS "Order ID",
+    sales_document_type AS "Order Type",
+    order_date AS "Order Date",
+    order_created_on AS "Created On",
+    customer_id AS "Customer ID",
+    customer_name AS "Customer Name",
+    sales_office AS "Sales Office",
+    order_net_value AS "Net Value",
+    currency AS "Currency",
+    overall_status AS "Overall Status",
+    ovrl_delivery_status AS "Delivery Status",
+    billing_status AS "Billing Status",
+    delivery_block AS "Delivery Block",
+    billing_block AS "Billing Block",
+    order_reason AS "Order Reason"
+FROM vw_sales_orders
+WHERE sales_document = 2010099827
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    sales_document_item AS "Item #",
+    material AS "Material ID",
+    item_description AS "Description",
+    material_group AS "Material Group",
+    item_category AS "Item Category",
+    target_quantity AS "Target Qty",
+    target_quantity_uom AS "UOM",
+    base_unit_of_measure AS "Base Unit",
+    net_value AS "Item Net Value",
+    relevant_for_billing AS "Billing Relevant",
+    reason_for_rejection AS "Rejection Reason"
+FROM sales_order_items
+WHERE sales_document = 2010099827
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] transaction commit at the wrong nesting level: <psycopg.Transaction '_pg3_1' (active) [INTRANS] (host=localhost port=5438 user=postgres database=customer_sales) at 0x7aabacd037d0> phase=SQL_EXECUTION
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] transaction commit at the wrong nesting level: <psycopg.Transaction '_pg3_2' (active) [INTRANS] (host=localhost port=5438 user=postgres database=customer_sales) at 0x7aabacd013d0> phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    sales_document AS "Order ID",
+    sales_document_type AS "Order Type",
+    order_date AS "Order Date",
+    order_created_on AS "Created On",
+    customer_id AS "Customer ID",
+    customer_name AS "Customer Name",
+    sales_office AS "Sales Office",
+    order_net_value AS "Net Value",
+    currency AS "Currency",
+    overall_status AS "Overall Status",
+    ovrl_delivery_status AS "Delivery Status",
+    billing_status AS "Billing Status",
+    delivery_block AS "Delivery Block",
+    billing_block AS "Billing Block",
+    order_reason AS "Order Reason"
+FROM vw_sales_orders
+WHERE sales_document = 2010099827
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 2 rows, 15 columns.
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    sales_document_item AS "Item #",
+    material AS "Material ID",
+    item_description AS "Description",
+    material_group AS "Material Group",
+    item_category AS "Item Category",
+    target_quantity AS "Target Qty",
+    target_quantity_uom AS "UOM",
+    base_unit_of_measure AS "Base Unit",
+    net_value AS "Item Net Value",
+    relevant_for_billing AS "Billing Relevant",
+    reason_for_rejection AS "Rejection Reason"
+FROM sales_order_items
+WHERE sales_document = 2010099827
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 2 rows, 11 columns.
+INFO:     2401:4900:16a1:642f:6037:9064:b52c:6bd3:0 - "GET / HTTP/1.1" 200 OK
+INFO:     2401:4900:16a1:642f:6037:9064:b52c:6bd3:0 - "GET /projects HTTP/1.1" 200 OK
+INFO:     2401:4900:16a1:642f:6037:9064:b52c:6bd3:0 - "GET /chat/threads HTTP/1.1" 200 OK
+INFO:     2401:4900:16a1:642f:6037:9064:b52c:6bd3:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     2401:4900:16a1:642f:6037:9064:b52c:6bd3:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     2401:4900:16a1:642f:6037:9064:b52c:6bd3:0 - "GET /chat/threads HTTP/1.1" 200 OK
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    DATE_TRUNC('month', billing_month) AS month,
+    SUM(total_revenue) AS total_revenue,
+    SUM(total_qty) AS total_quantity,
+    SUM(invoice_count) AS total_invoices,
+    COUNT(DISTINCT customer_id) AS unique_customers,
+    SUM(total_revenue) / NULLIF(SUM(total_qty), 0) AS avg_revenue_per_unit
+FROM vw_revenue_by_customer_month
+WHERE billing_month >= CURRENT_DATE - INTERVAL '6 months'
+GROUP BY DATE_TRUNC('month', billing_month)
+ORDER BY month
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 1 rows, 6 columns.
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    MIN(billing_month) AS earliest_month,
+    MAX(billing_month) AS latest_month,
+    COUNT(DISTINCT DATE_TRUNC('month', billing_month)) AS months_count
+FROM vw_revenue_by_customer_month
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 1 rows, 3 columns.
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    MIN(order_date) AS earliest_order,
+    MAX(order_date) AS latest_order
+FROM vw_sales_orders
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 1 rows, 2 columns.
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    DATE_TRUNC('month', order_date) AS month,
+    SUM(order_net_value) AS total_revenue,
+    COUNT(*) AS total_orders,
+    COUNT(DISTINCT customer_id) AS unique_customers
+FROM vw_sales_orders
+WHERE order_date >= CURRENT_DATE - INTERVAL '6 months'
+  AND overall_status NOT IN ('C', 'X')  -- exclude cancelled
+GROUP BY DATE_TRUNC('month', order_date)
+ORDER BY month
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    DATE_TRUNC('month', order_date) AS month,
+    SUM(order_net_value) AS total_revenue,
+    COUNT(*) AS total_orders
+FROM vw_sales_orders
+WHERE order_date >= CURRENT_DATE - INTERVAL '6 months'
+  AND overall_status NOT IN ('C', 'X')
+GROUP BY DATE_TRUNC('month', order_date)
+ORDER BY month
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] transaction commit at the wrong nesting level: <psycopg.Transaction '_pg3_1' (active) [INTRANS] (host=localhost port=5438 user=postgres database=customer_sales) at 0x7aabacd144d0> phase=SQL_EXECUTION
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] transaction commit at the wrong nesting level: <psycopg.Transaction '_pg3_2' (active) [INTRANS] (host=localhost port=5438 user=postgres database=customer_sales) at 0x7aabaccc5460> phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    DATE_TRUNC('month', order_date) AS month,
+    SUM(order_net_value) AS total_revenue,
+    COUNT(*) AS total_orders,
+    COUNT(DISTINCT customer_id) AS unique_customers
+FROM vw_sales_orders
+WHERE order_date >= CURRENT_DATE - INTERVAL '6 months'
+GROUP BY DATE_TRUNC('month', order_date)
+ORDER BY month
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 7 rows, 4 columns.
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    material AS material_id,
+    item_description,
+    SUM(total_qty_invoiced) AS total_quantity,
+    SUM(total_revenue) AS total_revenue,
+    SUM(invoice_count) AS total_invoices
+FROM vw_material_revenue
+GROUP BY material, item_description
+ORDER BY total_revenue DESC
+LIMIT 10
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    customer_id,
+    customer_name,
+    SUM(total_revenue) AS total_revenue,
+    SUM(total_qty) AS total_quantity,
+    SUM(invoice_count) AS total_invoices
+FROM vw_revenue_by_customer_month
+GROUP BY customer_id, customer_name
+ORDER BY total_revenue DESC
+LIMIT 10
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    SUM(order_net_value) AS total_revenue,
+    COUNT(*) AS total_orders,
+    COUNT(DISTINCT customer_id) AS total_customers,
+    COUNT(DISTINCT sales_organization) AS sales_orgs
+FROM vw_sales_orders
+WHERE order_date >= CURRENT_DATE - INTERVAL '6 months'
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] transaction commit at the wrong nesting level: <psycopg.Transaction '_pg3_1' (active) [INTRANS] (host=localhost port=5438 user=postgres database=customer_sales) at 0x7aabacd16de0> phase=SQL_EXECUTION
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] transaction commit at the wrong nesting level: <psycopg.Transaction '_pg3_2' (active) [INTRANS] (host=localhost port=5438 user=postgres database=customer_sales) at 0x7aaba4166390> phase=SQL_EXECUTION
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 10 rows, 5 columns.
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    customer_id,
+    customer_name,
+    SUM(total_revenue) AS total_revenue,
+    SUM(total_qty) AS total_quantity,
+    SUM(invoice_count) AS total_invoices
+FROM vw_revenue_by_customer_month
+GROUP BY customer_id, customer_name
+ORDER BY total_revenue DESC
+LIMIT 10
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    SUM(total_revenue) AS total_revenue,
+    SUM(total_qty) AS total_quantity,
+    SUM(invoice_count) AS total_invoices,
+    COUNT(DISTINCT customer_id) AS total_customers
+FROM vw_revenue_by_customer_month
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] transaction commit at the wrong nesting level: <psycopg.Transaction '_pg3_1' (active) [INTRANS] (host=localhost port=5438 user=postgres database=customer_sales) at 0x7aabac3c33e0> phase=SQL_EXECUTION
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] transaction commit at the wrong nesting level: <psycopg.Transaction '_pg3_2' (active) [INTRANS] (host=localhost port=5438 user=postgres database=customer_sales) at 0x7aabac3c3980> phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    customer_id,
+    customer_name,
+    SUM(total_revenue) AS total_revenue
+FROM vw_revenue_by_customer_month
+GROUP BY customer_id, customer_name
+ORDER BY total_revenue DESC
+LIMIT 10
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 10 rows, 3 columns.
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    SUM(total_revenue) AS total_revenue,
+    SUM(total_qty) AS total_quantity,
+    SUM(invoice_count) AS total_invoices,
+    COUNT(DISTINCT customer_id) AS total_customers
+FROM vw_revenue_by_customer_month
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 1 rows, 4 columns.
+[TOOL wren_export_csv] Invoked with SQL query:
+SELECT 
+    DATE_TRUNC('month', order_date) AS month,
+    customer_name,
+    item_description,
+    order_net_value,
+    order_date,
+    overall_status,
+    sales_office
+FROM vw_sales_orders
+WHERE order_date >= CURRENT_DATE - INTERVAL '6 months'
+ORDER BY order_date DESC
+[TOOL wren_export_csv] Successfully executed query. Retrieved PyArrow Table: 341095 rows, 7 columns.
+[TOOL wren_export_csv] Exported DataFrame converted and saved to disk at: exports/export_ec097c99.csv
+INFO:     2401:4900:8899:f3ea:58af:5fd9:51bd:d5a8:0 - "GET / HTTP/1.1" 200 OK
+INFO:     2401:4900:8899:f3ea:58af:5fd9:51bd:d5a8:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     2401:4900:8899:f3ea:58af:5fd9:51bd:d5a8:0 - "GET /projects HTTP/1.1" 200 OK
+INFO:     2401:4900:8899:f3ea:58af:5fd9:51bd:d5a8:0 - "GET /chat/threads HTTP/1.1" 200 OK
+INFO:     2a02:26f7:d6c4:6801:0:9000:0:e:0 - "GET / HTTP/1.1" 200 OK
+INFO:     2a02:26f7:d6c4:6801:0:9000:0:e:0 - "GET /projects HTTP/1.1" 200 OK
+INFO:     2a02:26f7:d6c4:6801:0:9000:0:e:0 - "GET /chat/threads HTTP/1.1" 200 OK
+INFO:     2a02:26f7:d6c4:6801:0:9000:0:e:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     2a02:26f7:d6c4:6801:0:9000:0:e:0 - "GET /chat/history/customer-sales/session_b4a3ee82?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     2401:4900:8899:f3ea:58af:5fd9:51bd:d5a8:0 - "GET /projects HTTP/1.1" 200 OK
+INFO:     2401:4900:8899:f3ea:58af:5fd9:51bd:d5a8:0 - "GET /chat/threads HTTP/1.1" 200 OK
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     2401:4900:8899:f3ea:58af:5fd9:51bd:d5a8:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     2401:4900:8899:f3ea:58af:5fd9:51bd:d5a8:0 - "GET /chat/threads HTTP/1.1" 200 OK
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    vw_sales_orders.customer_region AS state,
+    sales_order_items.item_description AS product,
+    sales_order_items.material_group AS material_group,
+    SUM(sales_order_items.net_value) AS total_revenue,
+    SUM(sales_order_items.target_quantity) AS total_qty_ordered,
+    COUNT(DISTINCT vw_sales_orders.customer_id) AS customer_count
+FROM vw_sales_orders
+JOIN sales_order_items 
+    ON vw_sales_orders.sales_document = sales_order_items.sales_document
+GROUP BY 
+    vw_sales_orders.customer_region,
+    sales_order_items.item_description,
+    sales_order_items.material_group
+ORDER BY 
+    vw_sales_orders.customer_region,
+    total_revenue DESC
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 100 rows, 6 columns.
+[TOOL wren_export_csv] Invoked with SQL query:
+SELECT 
+    vw_sales_orders.customer_region AS state,
+    sales_order_items.item_description AS product,
+    sales_order_items.material_group AS material_group,
+    SUM(sales_order_items.net_value) AS total_revenue,
+    SUM(sales_order_items.target_quantity) AS total_qty_ordered,
+    COUNT(DISTINCT vw_sales_orders.customer_id) AS customer_count
+FROM vw_sales_orders
+JOIN sales_order_items 
+    ON vw_sales_orders.sales_document = sales_order_items.sales_document
+GROUP BY 
+    vw_sales_orders.customer_region,
+    sales_order_items.item_description,
+    sales_order_items.material_group
+ORDER BY 
+    vw_sales_orders.customer_region,
+    total_revenue DESC
+[TOOL wren_export_csv] Successfully executed query. Retrieved PyArrow Table: 22014 rows, 6 columns.
+[TOOL wren_export_csv] Exported DataFrame converted and saved to disk at: exports/export_f33c7568.csv
+INFO:     2401:4900:8899:f3ea:58af:5fd9:51bd:d5a8:0 - "GET /chat/history/customer-sales/session_2ceed464?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     2401:4900:8899:f3ea:58af:5fd9:51bd:d5a8:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     2401:4900:8899:f3ea:58af:5fd9:51bd:d5a8:0 - "GET /chat/threads HTTP/1.1" 200 OK
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    vw_sales_orders.sales_document,
+    vw_sales_orders.order_date,
+    vw_sales_orders.customer_id,
+    vw_sales_orders.customer_name,
+    vw_sales_orders.customer_region,
+    sales_order_items.material,
+    sales_order_items.item_description,
+    sales_order_items.target_quantity,
+    sales_order_items.net_value,
+    ROUND(sales_order_items.net_value / NULLIF(sales_order_items.target_quantity, 0), 2) AS unit_rate
+FROM vw_sales_orders
+JOIN sales_order_items 
+    ON vw_sales_orders.sales_document = sales_order_items.sales_document
+WHERE sales_order_items.item_description ILIKE '%TIRUPATI SOYALITE REF SOYA OIL 15LTR JAR%'
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 85 rows, 10 columns.
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    vw_sales_orders.sales_document,
+    vw_sales_orders.order_date,
+    vw_sales_orders.customer_id,
+    vw_sales_orders.customer_name,
+    vw_sales_orders.overall_status,
+    sales_order_items.material,
+    sales_order_items.item_description,
+    sales_order_items.target_quantity,
+    sales_order_items.target_quantity_uom,
+    sales_order_items.net_value,
+    sales_order_items.base_unit_of_measure
+FROM vw_sales_orders
+JOIN sales_order_items 
+    ON vw_sales_orders.sales_document = sales_order_items.sales_document
+WHERE sales_order_items.item_description ILIKE '%TIRUPATI SOYALITE REF SOYA OIL 15LTR JAR%'
+GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12
+[TOOL wren_query] ERROR: [INVALID_SQL] Unknown output column: 12 phase=SQL_PLANNING
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    vw_sales_orders.sales_document,
+    vw_sales_orders.order_date,
+    vw_sales_orders.customer_id,
+    vw_sales_orders.customer_name,
+    vw_sales_orders.overall_status,
+    sales_order_items.material,
+    sales_order_items.item_description,
+    sales_order_items.order_quantity,
+    sales_order_items.sales_unit,
+    sales_order_items.net_price,
+    sales_order_items.net_value,
+    sales_order_items.pricing_unit
+FROM vw_sales_orders
+JOIN sales_order_items 
+    ON vw_sales_orders.sales_document = sales_order_items.sales_document
+WHERE sales_order_items.item_description ILIKE '%TIRUPATI SOYALITE REF SOYA OIL 15LTR JAR%'
+ORDER BY vw_sales_orders.order_date DESC
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 85 rows, 12 columns.
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    vw_sales_orders.sales_document,
+    vw_sales_orders.order_date,
+    vw_sales_orders.customer_id,
+    vw_sales_orders.customer_name,
+    vw_sales_orders.overall_status,
+    sales_order_items.order_quantity,
+    sales_order_items.net_price,
+    sales_order_items.net_value
+FROM vw_sales_orders
+JOIN sales_order_items 
+    ON vw_sales_orders.sales_document = sales_order_items.sales_document
+WHERE sales_order_items.item_description ILIKE '%TIRUPATI SOYALITE REF SOYA OIL 15LTR JAR%'
+GROUP BY 1,2,3,4,5,6,7,8
+ORDER BY vw_sales_orders.order_date DESC
+[TOOL wren_query] Successfully executed preview query. Retrieved PyArrow Table: 14 rows, 8 columns.
+[TOOL wren_export_csv] Invoked with SQL query:
+SELECT 
+    vw_sales_orders.sales_document AS "Sales Document",
+    vw_sales_orders.order_date AS "Order Date",
+    vw_sales_orders.customer_id AS "Customer ID",
+    vw_sales_orders.customer_name AS "Customer Name",
+    vw_sales_orders.customer_region AS "Region",
+    vw_sales_orders.overall_status AS "Status",
+    sales_order_items.order_quantity AS "Order Qty",
+    sales_order_items.net_price AS "Net Price/Unit",
+    sales_order_items.net_value AS "Net Value"
+FROM vw_sales_orders
+JOIN sales_order_items 
+    ON vw_sales_orders.sales_document = sales_order_items.sales_document
+WHERE sales_order_items.item_description ILIKE '%TIRUPATI SOYALITE REF SOYA OIL 15LTR JAR%'
+GROUP BY 1,2,3,4,5,6,7,8,9
+ORDER BY vw_sales_orders.order_date DESC
+[TOOL wren_export_csv] Successfully executed query. Retrieved PyArrow Table: 14 rows, 9 columns.
+[TOOL wren_export_csv] Exported DataFrame converted and saved to disk at: exports/export_e3d8bdab.csv
+INFO:     2401:4900:16a1:642f:3108:5b63:2d30:6568:0 - "GET / HTTP/1.1" 200 OK
+INFO:     2401:4900:16a1:642f:3108:5b63:2d30:6568:0 - "GET / HTTP/1.1" 200 OK
+INFO:     2401:4900:16a1:642f:3108:5b63:2d30:6568:0 - "GET /projects HTTP/1.1" 200 OK
+INFO:     2401:4900:16a1:642f:3108:5b63:2d30:6568:0 - "GET /chat/threads HTTP/1.1" 200 OK
+INFO:     2401:4900:16a1:642f:3108:5b63:2d30:6568:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     2401:4900:16a1:642f:3108:5b63:2d30:6568:0 - "GET /chat/history/customer-sales/session_2ceed464?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     2401:4900:88eb:429e:d104:be95:1aec:67f8:0 - "GET / HTTP/1.1" 200 OK
+INFO:     2401:4900:88eb:429e:d104:be95:1aec:67f8:0 - "GET /projects HTTP/1.1" 200 OK
+INFO:     2401:4900:88eb:429e:d104:be95:1aec:67f8:0 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     2401:4900:88eb:429e:d104:be95:1aec:67f8:0 - "GET /chat/threads HTTP/1.1" 200 OK
+INFO:     2401:4900:88eb:429e:d104:be95:1aec:67f8:0 - "GET /chat/history/customer-sales/session_7af60e76?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+INFO:     2401:4900:88eb:429e:d104:be95:1aec:67f8:0 - "GET /chat/history/customer-sales/session_2ceed464?provider=minimax&thinking_level=off HTTP/1.1" 200 OK
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     2401:4900:be95:9e8:8d2c:c7e7:f8c8:f523:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     2401:4900:be95:9e8:8d2c:c7e7:f8c8:f523:0 - "GET /chat/threads HTTP/1.1" 200 OK
+[TOOL wren_query] Invoked with SQL query:
+WITH region_product_sales AS (
+    SELECT 
+        vw_sales_orders.customer_region AS region,
+        sales_order_items.item_description AS product,
+        sales_order_items.material_group AS material_group,
+        SUM(sales_order_items.net_value) AS product_revenue,
+        SUM(sales_order_items.target_quantity) AS total_qty
+    FROM vw_sales_orders
+    JOIN sales_order_items 
+        ON vw_sales_orders.sales_document = sales_order_items.sales_document
+    GROUP BY 
+        vw_sales_orders.customer_region,
+        sales_order_items.item_description,
+        sales_order_items.material_group
+),
+region_totals AS (
+    SELECT 
+        region,
+        SUM(product_revenue) AS total_region_revenue
+    FROM region_product_sales
+    GROUP BY region
+)
+SELECT 
+    rps.region,
+    rps.product,
+    rps.material_group,
+    ROUND(rps.product_revenue, 2) AS product_revenue,
+    ROUND(rps.total_qty, 0) AS total_quantity,
+    ROUND(rt.total_region_revenue, 2) AS total_region_revenue,
+    ROUND((rps.product_revenue / rt.total_region_revenue) * 100, 2) AS revenue_percentage
+FROM region_product_sales rps
+JOIN region_totals rt ON rps.region = rt.region
+ORDER BY 
+    rps.region,
+    revenue_percentage DESC
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] cursor "ibis_postgres_cursor_jv232alb35h7xmstwt53ctoysy" does not exist phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    vw_sales_orders.customer_region AS region,
+    sales_order_items.item_description AS product,
+    sales_order_items.material_group AS material_group,
+    SUM(sales_order_items.net_value) AS product_revenue,
+    SUM(sales_order_items.target_quantity) AS total_quantity
+FROM vw_sales_orders
+JOIN sales_order_items 
+    ON vw_sales_orders.sales_document = sales_order_items.sales_document
+GROUP BY 
+    vw_sales_orders.customer_region,
+    sales_order_items.item_description,
+    sales_order_items.material_group
+ORDER BY 
+    vw_sales_orders.customer_region,
+    product_revenue DESC
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    customer_region AS region,
+    item_description AS product,
+    material_group,
+    SUM(total_revenue) AS product_revenue,
+    SUM(total_qty_invoiced) AS total_qty
+FROM vw_material_revenue
+GROUP BY 
+    customer_region,
+    item_description,
+    material_group
+ORDER BY 
+    customer_region,
+    product_revenue DESC
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT customer_region, sales_document FROM vw_sales_orders LIMIT 5
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT region FROM vw_revenue_by_customer_month LIMIT 5
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT sales_org, name FROM sales_organization LIMIT 5
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT * FROM material_master LIMIT 5
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 1 AS test
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    customer_region AS region,
+    item_description AS product,
+    material_group,
+    SUM(item_net_value) AS product_revenue,
+    SUM(invoiced_quantity) AS total_qty
+FROM vw_billing
+WHERE customer_region IS NOT NULL
+GROUP BY 
+    customer_region,
+    item_description,
+    material_group
+ORDER BY 
+    customer_region,
+    product_revenue DESC
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    customer_region AS region,
+    item_description AS product,
+    material_group,
+    SUM(item_net_value) AS product_revenue,
+    SUM(invoiced_quantity) AS total_qty
+FROM vw_billing
+WHERE customer_region IS NOT NULL
+GROUP BY 
+    customer_region,
+    item_description,
+    material_group
+ORDER BY 
+    customer_region,
+    product_revenue DESC
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 1 AS test
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_export_csv] Invoked with SQL query:
+SELECT 
+    customer_region AS region,
+    item_description AS product,
+    material_group,
+    SUM(item_net_value) AS product_revenue,
+    SUM(invoiced_quantity) AS total_qty
+FROM vw_billing
+WHERE customer_region IS NOT NULL
+GROUP BY 
+    customer_region,
+    item_description,
+    material_group
+ORDER BY 
+    customer_region,
+    product_revenue DESC
+[TOOL wren_export_csv] ERROR failed to export CSV: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT material, item_description FROM billing_items LIMIT 5
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    customer_region AS region,
+    item_description AS product,
+    material_group,
+    SUM(item_net_value) AS product_revenue,
+    SUM(invoiced_quantity) AS total_qty
+FROM vw_billing
+WHERE customer_region IS NOT NULL
+GROUP BY 
+    customer_region,
+    item_description,
+    material_group
+ORDER BY 
+    customer_region,
+    product_revenue DESC
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT * FROM billing_items LIMIT 1
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT * FROM region LIMIT 1
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT region, description FROM region LIMIT 5
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 'test' AS connection_test
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_export_csv] Invoked with SQL query:
+SELECT 
+    customer_region AS region,
+    item_description AS product,
+    material_group,
+    SUM(item_net_value) AS product_revenue,
+    SUM(invoiced_quantity) AS total_qty
+FROM vw_billing
+WHERE customer_region IS NOT NULL
+GROUP BY 
+    customer_region,
+    item_description,
+    material_group
+ORDER BY 
+    customer_region,
+    product_revenue DESC
+[TOOL wren_export_csv] ERROR failed to export CSV: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 1 AS num
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 1
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_export_csv] Invoked with SQL query:
+SELECT 
+    customer_region AS region,
+    item_description AS product,
+    material_group,
+    SUM(item_net_value) AS product_revenue,
+    SUM(invoiced_quantity) AS total_qty
+FROM vw_billing
+WHERE customer_region IS NOT NULL
+GROUP BY 
+    customer_region,
+    item_description,
+    material_group
+ORDER BY 
+    customer_region,
+    product_revenue DESC
+[TOOL wren_export_csv] ERROR failed to export CSV: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    customer_region AS region,
+    item_description AS product,
+    material_group,
+    SUM(item_net_value) AS product_revenue,
+    SUM(invoiced_quantity) AS total_qty
+FROM vw_billing
+WHERE customer_region IS NOT NULL
+GROUP BY 
+    customer_region,
+    item_description,
+    material_group
+ORDER BY 
+    customer_region,
+    product_revenue DESC
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    customer_region AS region,
+    item_description AS product,
+    material_group,
+    SUM(item_net_value) AS product_revenue,
+    SUM(invoiced_quantity) AS total_qty
+FROM vw_billing
+WHERE customer_region IS NOT NULL
+GROUP BY 
+    customer_region,
+    item_description,
+    material_group
+ORDER BY 
+    customer_region,
+    product_revenue DESC
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 1 AS test
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    billing_items.item_description AS product,
+    billing_items.material_group AS material_group,
+    SUM(billing_items.net_value) AS total_revenue,
+    SUM(billing_items.invoiced_quantity) AS total_qty
+FROM billing_items
+GROUP BY 
+    billing_items.item_description,
+    billing_items.material_group
+ORDER BY total_revenue DESC
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    customer_region AS region,
+    item_description AS product,
+    material_group,
+    SUM(item_net_value) AS product_revenue,
+    SUM(invoiced_quantity) AS total_qty
+FROM vw_billing
+WHERE customer_region IS NOT NULL
+GROUP BY 
+    customer_region,
+    item_description,
+    material_group
+ORDER BY 
+    customer_region,
+    product_revenue DESC
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     2401:4900:be95:9e8:8d2c:c7e7:f8c8:f523:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     2401:4900:be95:9e8:8d2c:c7e7:f8c8:f523:0 - "GET /chat/threads HTTP/1.1" 200 OK
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    customer_region AS region,
+    item_description AS product,
+    material_group,
+    SUM(item_net_value) AS product_revenue,
+    SUM(invoiced_quantity) AS total_qty
+FROM vw_billing
+WHERE customer_region IS NOT NULL
+GROUP BY 
+    customer_region,
+    item_description,
+    material_group
+ORDER BY 
+    customer_region,
+    product_revenue DESC
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT DISTINCT customer_region FROM vw_billing LIMIT 5
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_export_csv] Invoked with SQL query:
+SELECT 
+    customer_region AS region,
+    item_description AS product,
+    material_group,
+    SUM(item_net_value) AS product_revenue,
+    SUM(invoiced_quantity) AS total_qty
+FROM vw_billing
+WHERE customer_region IS NOT NULL
+GROUP BY 
+    customer_region,
+    item_description,
+    material_group
+ORDER BY 
+    customer_region,
+    product_revenue DESC
+[TOOL wren_export_csv] ERROR failed to export CSV: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT billing_document, region FROM billing_header LIMIT 5
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT 
+    vw_sales_orders.customer_region AS region,
+    sales_order_items.item_description AS product,
+    sales_order_items.material_group AS material_group,
+    SUM(sales_order_items.net_value) AS total_revenue,
+    SUM(sales_order_items.target_quantity) AS total_qty_ordered,
+    COUNT(DISTINCT vw_sales_orders.customer_id) AS customer_count
+FROM vw_sales_orders
+JOIN sales_order_items 
+    ON vw_sales_orders.sales_document = sales_order_items.sales_document
+GROUP BY 
+    vw_sales_orders.customer_region,
+    sales_order_items.item_description,
+    sales_order_items.material_group
+ORDER BY 
+    vw_sales_orders.customer_region,
+    total_revenue DESC
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_query] Invoked with SQL query:
+SELECT DISTINCT region FROM vw_revenue_by_customer_month LIMIT 10
+[TOOL wren_query] ERROR: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+[TOOL wren_export_csv] Invoked with SQL query:
+SELECT 
+    vw_sales_orders.customer_region AS region,
+    sales_order_items.item_description AS product,
+    sales_order_items.material_group AS material_group,
+    SUM(sales_order_items.net_value) AS total_revenue,
+    SUM(sales_order_items.target_quantity) AS total_qty_ordered
+FROM vw_sales_orders
+JOIN sales_order_items 
+    ON vw_sales_orders.sales_document = sales_order_items.sales_document
+WHERE vw_sales_orders.customer_region IS NOT NULL
+GROUP BY 
+    vw_sales_orders.customer_region,
+    sales_order_items.item_description,
+    sales_order_items.material_group
+ORDER BY 
+    vw_sales_orders.customer_region,
+    total_revenue DESC
+[TOOL wren_export_csv] ERROR failed to export CSV: [GENERIC_USER_ERROR] current transaction is aborted, commands ignored until end of transaction block phase=SQL_EXECUTION
+Loaded environment variables from /home/web-h-063/sales_wren/.env
+INFO:     2401:4900:be95:9e8:8d2c:c7e7:f8c8:f523:0 - "POST /chat/stream HTTP/1.1" 200 OK
+INFO:     2401:4900:be95:9e8:8d2c:c7e7:f8c8:f523:0 - "GET /chat/threads HTTP/1.1" 200 OK
