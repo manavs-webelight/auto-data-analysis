@@ -17,7 +17,7 @@ from wren_api.forecasting_tools import load_forecasting_models
 load_dotenv()
 
 # Initialize SQLite connection once for list_chat_threads
-conn = sqlite3.connect("chat_memory.db", check_same_thread=False)
+conn = sqlite3.connect("/home/web-h-063/Documents/auto-data-intelligence/wren_api/chat_memory.db", check_same_thread=False)
 checkpointer = None
 
 class CustomWrenToolkit(WrenToolkit):
@@ -69,7 +69,7 @@ class CustomWrenToolkit(WrenToolkit):
                 filepath = os.path.join("exports", filename)
                 df.to_csv(filepath, index=False)
                 print(f"[TOOL wren_export_csv] Exported DataFrame converted and saved to disk at: {filepath}")
-                return f"CSV successfully exported! Download link: /exports/{filename}"
+                return f"CSV successfully exported! [Download CSV](/exports/{filename})"
             except Exception as e:
                 print(f"[TOOL wren_export_csv] ERROR failed to export CSV: {str(e)}")
                 return f"Error exporting CSV: {str(e)}"
@@ -234,9 +234,9 @@ _toolkit_cache: dict[str, WrenToolkit] = {}
 _models = {}
 
 
-def get_model(provider: str = "minimax", thinking_level: str | None = None):
+def get_model(provider: str = "gemini-3.1-flash-lite", thinking_level: str | None = None):
     global _models
-    provider = (provider or "minimax").lower()
+    provider = (provider or "gemini-3.1-flash-lite").lower()
     if provider == "gemini":
         provider = "gemini-2.5-flash"
     
@@ -289,7 +289,7 @@ async def lifespan(app: FastAPI):
     global checkpointer
     load_project_env(".")
     # Pre-initialize both projects at startup
-    async with AsyncSqliteSaver.from_conn_string("chat_memory.db") as saver:
+    async with AsyncSqliteSaver.from_conn_string("/home/web-h-063/Documents/auto-data-intelligence/wren_api/chat_memory.db") as saver:
         checkpointer = saver
         for project_id, config in PROJECTS.items():
             try:
@@ -526,16 +526,17 @@ def format_messages_chunk(chunk):
         if hasattr(message, "tool_call_chunks") and message.tool_call_chunks:
             for tc in message.tool_call_chunks:
                 if tc.get("name"):
-                    yield f"event: tool_call\ndata: {json.dumps({'name': tc['name'], 'input': {}})}\n\n"
+                    yield f"event: tool_call\ndata: {json.dumps({'id': tc.get('id'), 'name': tc['name'], 'input': {}})}\n\n"
 
     # Handle ToolMessage
     elif message.__class__.__name__ == "ToolMessage":
         if hasattr(message, "content"):
+            tool_id = getattr(message, "tool_call_id", None)
             try:
                 content = json.loads(message.content) if isinstance(message.content, str) else message.content
-                yield f"event: tool_result\ndata: {json.dumps({'tool': message.name, 'content': content})}\n\n"
+                yield f"event: tool_result\ndata: {json.dumps({'id': tool_id, 'tool': message.name, 'content': content})}\n\n"
             except:
-                yield f"event: tool_result\ndata: {json.dumps({'tool': message.name, 'content': str(message.content)})}\n\n"
+                yield f"event: tool_result\ndata: {json.dumps({'id': tool_id, 'tool': message.name, 'content': str(message.content)})}\n\n"
 
 
 def format_stream_event(event):
@@ -546,7 +547,7 @@ def format_stream_event(event):
             content = message.content if hasattr(message, "content") else str(message)
             if hasattr(message, "tool_calls") and message.tool_calls:
                 for tc in message.tool_calls:
-                    yield f"event: tool_call\ndata: {json.dumps({'name': tc['name'], 'input': tc.get('args', {})})}\n\n"
+                    yield f"event: tool_call\ndata: {json.dumps({'id': tc.get('id'), 'name': tc['name'], 'input': tc.get('args', {})})}\n\n"
             if hasattr(message, "content"):
                 if isinstance(message.content, str):
                     if message.content:
@@ -559,15 +560,16 @@ def format_stream_event(event):
                             elif block.get("type") == "text":
                                 yield f"event: text\ndata: {json.dumps({'text': block.get('text', '')})}\n\n"
                             elif block.get("type") == "tool_use":
-                                yield f"event: tool_call\ndata: {json.dumps({'name': block.get('name'), 'input': block.get('input')})}\n\n"
+                                yield f"event: tool_call\ndata: {json.dumps({'id': block.get('id'), 'name': block.get('name'), 'input': block.get('input')})}\n\n"
     elif "tools" in event:
         for message in event["tools"]["messages"]:
             if hasattr(message, "content"):
+                tool_id = getattr(message, "tool_call_id", None)
                 try:
                     content = json.loads(message.content) if isinstance(message.content, str) else message.content
-                    yield f"event: tool_result\ndata: {json.dumps({'tool': message.name, 'content': content})}\n\n"
+                    yield f"event: tool_result\ndata: {json.dumps({'id': tool_id, 'tool': message.name, 'content': content})}\n\n"
                 except:
-                    yield f"event: tool_result\ndata: {json.dumps({'tool': message.name, 'content': str(message.content)})}\n\n"
+                    yield f"event: tool_result\ndata: {json.dumps({'id': tool_id, 'tool': message.name, 'content': str(message.content)})}\n\n"
 
 
 @app.get("/chat/threads")
